@@ -30,11 +30,12 @@ app.use(
   cors({
     origin: [
       "http://localhost:5174",
-      "full-stack-stock-monitoring-tool-frontend.vercel.app"
+      "https://full-stack-stock-monitoring-tool-frontend.vercel.app"
     ],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Ensure all necessary methods are allowed
-    allowedHeaders: ["Content-Type", "Authorization"], // Allow required headers
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 200
   })
 );
 
