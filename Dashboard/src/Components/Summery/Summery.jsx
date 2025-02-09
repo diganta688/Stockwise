@@ -15,7 +15,7 @@ function Summery() {
     const fetchData = async () => {
       try {
         const holdingsRes = await axios.get(
-          `http://localhost:8080/allHoldings/${id}`
+          `https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/allHoldings/${id}`
         );
         const holdings = holdingsRes.data.holdings;
         setAllHoldings(holdings);
@@ -26,7 +26,7 @@ function Summery() {
         );
         setTotalCurrValue(currValue);
         const userRes = await axios.post(
-          "http://localhost:8080/user/find",
+          "https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/user/find",
           {
             uId: id,
           },
@@ -38,7 +38,7 @@ function Summery() {
         toast.error(error, { position: "top-right" , autoclose: 2000}); 
       }
     };
-    axios.get(`http://localhost:8080/allwishlist/${id}`).then((res) => {
+    axios.get(`https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/allwishlist/${id}`).then((res) => {
       setAllWishlist(res.data.wishlists);
     });
     fetchData();

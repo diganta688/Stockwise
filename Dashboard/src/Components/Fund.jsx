@@ -37,7 +37,7 @@ const Funds = () => {
   const fetchTransactionHistory = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/transaction-history/${id}`
+        `https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/transaction-history/${id}`
       );
       const sortedTransactions = response.data.sort(
         (a, b) => new Date(b.date) - new Date(a.date)
@@ -76,7 +76,7 @@ const Funds = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/withdraw-funds/${id}`,
+        `https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/withdraw-funds/${id}`,
         {
           amount: Number(amount),
         }
@@ -112,7 +112,7 @@ const Funds = () => {
   const fetchWalletBalance = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/wallet-balance/${id}`
+        `https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/wallet-balance/${id}`
       );
       setWalletBalance(response.data.balance);
     } catch (error) {
@@ -134,7 +134,7 @@ const Funds = () => {
 
     try {
       const orderResponse = await axios.post(
-        "http://localhost:8080/create-order",
+        "https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/create-order",
         {
           amount: amount * 100,
           currency: "INR",
@@ -172,7 +172,7 @@ const Funds = () => {
         handler: async (response) => {
           try {
             const verificationResponse = await axios.post(
-              `http://localhost:8080/verify-payment/${id}`,
+              `https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/verify-payment/${id}`,
               {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,

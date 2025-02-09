@@ -28,7 +28,7 @@ function Menuu() {
     try {
       setAnchorElUser(null);
       let res = await axios.post(
-        "http://localhost:8080/logout",
+        "https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/logout",
         {},
         {
           withCredentials: true,
