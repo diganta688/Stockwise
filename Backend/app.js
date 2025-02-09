@@ -674,9 +674,7 @@ app.use((err, req, res, next) => {
   res.status(status).json({ error: message });
 });
 
-app.listen(8080, () => {
-  console.log("App is listening at port 8080");
-
+app.listen(process.env.PORT || 8080, () => {
   mongoose
     .connect(mongo_url)
     .then(() => {
