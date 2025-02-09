@@ -28,7 +28,7 @@ const client = require("twilio")(accoutSid, authToken, {
 
 app.use(
   cors({
-    origin: ["full-stack-stock-monitoring-tool-dashboarrdd.vercel.app", "full-stack-stock-monitoring-tool-frontend.vercel.app"],
+    origin: ["full-stack-stock-monitoring-tool-dashboard.vercel.app", "full-stack-stock-monitoring-tool-frontend.vercel.app"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
   })
