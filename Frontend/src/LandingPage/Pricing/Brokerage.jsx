@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Equity from "./priceDevide/equity";
+import Equity from "./priceDevide/Equity";
 import Commodity from "./priceDevide/Commodity";
 import Currency from "./priceDevide/Currency";
 
