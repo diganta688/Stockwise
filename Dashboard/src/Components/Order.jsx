@@ -11,7 +11,7 @@ function Order() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/allOrders/${id}`)
+      .get(`https://full-stack-stock-monitoring-tool-d7k4.onrender.com/allOrders/${id}`)
       .then((res) => {
         if (res.data.success) {
           const orders = res.data.orders;
@@ -21,7 +21,7 @@ function Order() {
             const timeDiff = currentDate - orderDate;
             if (timeDiff >= 24 * 60 * 60 * 1000) {
               axios
-                .delete(`http://localhost:8080/delete-order/${order._id}`)
+                .delete(`https://full-stack-stock-monitoring-tool-d7k4.onrender.com/delete-order/${order._id}`)
                 .then(() => {
                   console.log(`Order ${order._id} deleted.`);
                   setallOrders((prevOrders) =>
