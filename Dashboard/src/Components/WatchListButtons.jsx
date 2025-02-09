@@ -27,7 +27,7 @@ const WatchListButtons = ({ uid, refreshWatchlist }) => {
   const deleteFromWishlist = async () => {
     toast.success("successfully removed", { position: "top-right", autoclose: 2000 });
     refreshWatchlist();
-    await axios.post(`https://full-stack-stock-monitoring-tool-9qmj.onrender.com/delete-from-wishlist/${id}`, {
+    await axios.post(`http://localhost:8080/delete-from-wishlist/${id}`, {
       data: uid._id,
     });
     
