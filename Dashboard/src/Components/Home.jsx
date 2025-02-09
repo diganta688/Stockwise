@@ -21,7 +21,7 @@ function Home() {
 
     } catch (error) {
       console.error("Session expired:", error);
-      window.location.href = "http://localhost:5173/signup";
+      window.location.href = "https://full-stack-stock-monitoring-tool-frontend.vercel.app/signup";
     }
   };
 
