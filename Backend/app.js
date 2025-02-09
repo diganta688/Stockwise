@@ -664,7 +664,9 @@ app.post('/sell-stock', async (req, res) => {
     });
   }
 });
-
+app.get("/", (req, res)=>{
+  res.send("hello");
+})
 app.all("*", (req, res, next) => {
   next(new expresserr(404, "We couldn’t find the page you were looking for."));
 });
