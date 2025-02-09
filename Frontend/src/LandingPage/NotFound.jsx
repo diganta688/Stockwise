@@ -7,7 +7,7 @@ function NotFound() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/non-exist-route")
+      .get("https://full-stack-stock-monitoring-tool-d7k4.onrender.com/non-exist-route")
       .then((response) => {
         console.log("Response:", response);
       })

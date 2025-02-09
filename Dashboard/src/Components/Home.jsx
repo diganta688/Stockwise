@@ -15,13 +15,13 @@ function Home() {
   const fetchUserData = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:8080/dashboard/${id}`,
+        `https://full-stack-stock-monitoring-tool-d7k4.onrender.com/dashboard/${id}`,
         { withCredentials: true }
       );
 
     } catch (error) {
       console.error("Session expired:", error);
-      window.location.href = "http://localhost:5173/signup";
+      window.location.href = "full-stack-stock-monitoring-tool-frontend.vercel.app/signup";
     }
   };
 

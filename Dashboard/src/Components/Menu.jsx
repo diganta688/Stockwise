@@ -28,14 +28,14 @@ function Menuu() {
     try {
       setAnchorElUser(null);
       let res = await axios.post(
-        "http://localhost:8080/logout",
+        "https://full-stack-stock-monitoring-tool-d7k4.onrender.com/logout",
         {},
         {
           withCredentials: true,
         }
       );
       if (res.data.success) {
-        window.open("http://localhost:5173/signup", "_blank");
+        window.open("full-stack-stock-monitoring-tool-frontend.vercel.app/signup", "_blank");
         window.close();
       }
     } catch (e) {
