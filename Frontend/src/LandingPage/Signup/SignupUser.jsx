@@ -72,7 +72,7 @@ function SignupUser() {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "https://full-stack-stock-monitoring-tool-d7k4.onrender.com/signup/final",
+        "http://localhost:8080/signup/final",
         {
           ...formData,
         },

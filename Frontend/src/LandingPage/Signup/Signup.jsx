@@ -34,7 +34,7 @@ function Signup() {
     setIsContinue(false)
     e.preventDefault();
     try {
-      const response = await axios.post("https://full-stack-stock-monitoring-tool-d7k4.onrender.com/signup/mobile", {
+      const response = await axios.post("http://localhost:8080/signup/mobile", {
         phoneNumber:  "+91"+mobile,
       });
       let {generateOTP, success} = response.data;
@@ -57,7 +57,7 @@ function Signup() {
     setIsContinue(true);
     try {
       const response = await axios.post(
-        "https://full-stack-stock-monitoring-tool-d7k4.onrender.com/mobile-verification",
+        "http://localhost:8080/mobile-verification",
         {
           phoneNumber:mobile,
         }

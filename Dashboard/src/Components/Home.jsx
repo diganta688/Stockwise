@@ -15,7 +15,7 @@ function Home() {
   const fetchUserData = async () => {
     try {
       const { data } = await axios.get(
-        `https://full-stack-stock-monitoring-tool-d7k4.onrender.com/dashboard/${id}`,
+        `http://localhost:8080/dashboard/${id}`,
         { withCredentials: true }
       );
 
