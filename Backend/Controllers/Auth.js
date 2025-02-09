@@ -68,7 +68,7 @@ module.exports.Login = async (req, res) => {
     res.status(201).json({
       message: "User login up successfully",
       success: true,
-      redirectTo: `https://full-stack-stock-monitoring-tool-ten.vercel.app/dashboard/dashboard/${user._id}/summery`,
+      redirectTo: `https://full-stack-stock-monitoring-tool-ten.vercel.app/dashboard/${user._id}/summery`,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
