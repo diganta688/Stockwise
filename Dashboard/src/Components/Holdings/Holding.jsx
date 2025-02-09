@@ -16,7 +16,7 @@ const Holdings = () => {
 
   let get = async () => {
     try {
-      await axios.get(`https://full-stack-stock-monitoring-tool-d7k4.onrender.com/allHoldings/${id}`).then((res) => {
+      await axios.get(`https://full-stack-stock-monitoring-tool-9qmj.onrender.com/allHoldings/${id}`).then((res) => {
         let holdings = res.data.holdings;
         setAllHoldings(res.data.holdings);
         const investment = holdings.reduce(
@@ -37,7 +37,7 @@ const Holdings = () => {
   
   const update =async ()=>{
     const response = await axios.post(
-      "https://full-stack-stock-monitoring-tool-d7k4.onrender.com/update-holding",
+      "https://full-stack-stock-monitoring-tool-9qmj.onrender.com/update-holding",
       {
         data: allHoldings,
       }
@@ -48,7 +48,7 @@ const Holdings = () => {
     if(allHoldings.length>0){
       try {
         const response = await axios.post(
-          "https://full-stack-stock-monitoring-tool-d7k4.onrender.com/update-stock-wishlist",
+          "https://full-stack-stock-monitoring-tool-9qmj.onrender.com/update-stock-wishlist",
           {
             names: allHoldings.map((item) => item.name),
           }
