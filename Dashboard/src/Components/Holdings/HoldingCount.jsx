@@ -43,7 +43,7 @@ function HoldingCount({ allHoldings, totalInvestment, totalCurrValue }) {
   const sell = async () => {
    if(sellQty>0){
     try {
-      const response = await axios.post("https://full-stack-stock-monitoring-tool-9qmj.onrender.com/sell-stock", {
+      const response = await axios.post("https://full-stack-stock-monitoring-tool-d7k4.onrender.com/sell-stock", {
           stockId: selectedStock._id,
           userId: id,
           sellQty: sellQty,

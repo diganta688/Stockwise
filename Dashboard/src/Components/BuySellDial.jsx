@@ -28,7 +28,7 @@ function BuySellDial({ isOpen, setIsopen, uid }) {
   let fetchData = async () => {
     try {
       let res = await axios.post(
-        `https://full-stack-stock-monitoring-tool-9qmj.onrender.com/fetch-order-details/${uid}`
+        `https://full-stack-stock-monitoring-tool-d7k4.onrender.com/fetch-order-details/${uid}`
       );
       setStock(res.data.message);
     } catch (error) {
@@ -59,7 +59,7 @@ function BuySellDial({ isOpen, setIsopen, uid }) {
   const handleSubmit = async () => {
     try {
       const response = await axios.get(
-        `https://full-stack-stock-monitoring-tool-9qmj.onrender.com/wallet-balance/${id}`
+        `https://full-stack-stock-monitoring-tool-d7k4.onrender.com/wallet-balance/${id}`
       );
       setWalletBalance(response.data.balance);
       if(walletBalance>=price){
@@ -69,14 +69,14 @@ function BuySellDial({ isOpen, setIsopen, uid }) {
           setIsPlacedOrder(false);
           setIsopen(false);
           mouse.setIsMouseEnter(false);
-          await axios.post(`https://full-stack-stock-monitoring-tool-9qmj.onrender.com/addOrder/${id}/${uid}`, {
+          await axios.post(`https://full-stack-stock-monitoring-tool-d7k4.onrender.com/addOrder/${id}/${uid}`, {
             price: price,
             qty: qty,
             mode: "BUY",
           });
         }, 4000);
         await axios.post(
-          `https://full-stack-stock-monitoring-tool-9qmj.onrender.com/buy-stock-balence/${id}`,
+          `https://full-stack-stock-monitoring-tool-d7k4.onrender.com/buy-stock-balence/${id}`,
           {
             amount: Number(price),
           }

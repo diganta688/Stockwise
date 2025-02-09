@@ -15,7 +15,7 @@ function Home() {
   const fetchUserData = async () => {
     try {
       const { data } = await axios.get(
-        `https://full-stack-stock-monitoring-tool-9qmj.onrender.com/dashboard/${id}`,
+        `full-stack-stock-monitoring-tool-dashboard.vercel.app/${id}`,
         { withCredentials: true }
       );
 
