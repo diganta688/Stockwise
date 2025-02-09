@@ -10,7 +10,7 @@ function Wishlist({ watchlistUpdated, refreshWatchlist }) {
   const [allWishlist, setAllWishlist] = useState([]);
   const getData = async () => {
     try {
-      const res = await axios.get(`https://full-stack-stock-monitoring-tool-d7k4.onrender.com/allwishlist/${id}`);
+      const res = await axios.get(`https://full-stack-stock-monitoring-tool-9qmj.onrender.com/allwishlist/${id}`);
       setAllWishlist(res.data.wishlists);
     } catch (error) {
       toast.error(error, { position: "top-right", autoclose: 2000 });
@@ -19,7 +19,7 @@ function Wishlist({ watchlistUpdated, refreshWatchlist }) {
 
   const update =async ()=>{
     const response = await axios.post(
-      "https://full-stack-stock-monitoring-tool-d7k4.onrender.com/update-wishlist",
+      "https://full-stack-stock-monitoring-tool-9qmj.onrender.com/update-wishlist",
       {
         data: allWishlist,
       }
@@ -29,7 +29,7 @@ function Wishlist({ watchlistUpdated, refreshWatchlist }) {
     if (allWishlist.length > 0) {
       try {
         const response = await axios.post(
-          "https://full-stack-stock-monitoring-tool-d7k4.onrender.com/update-stock-wishlist",
+          "https://full-stack-stock-monitoring-tool-9qmj.onrender.com/update-stock-wishlist",
           {
             names: allWishlist.map((item) => item.name),
           }

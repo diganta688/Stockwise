@@ -34,7 +34,7 @@ function Signup() {
     setIsContinue(false)
     e.preventDefault();
     try {
-      const response = await axios.post("https://full-stack-stock-monitoring-tool-d7k4.onrender.com/signup/mobile", {
+      const response = await axios.post("https://full-stack-stock-monitoring-tool-9qmj.onrender.com/signup/mobile", {
         phoneNumber:  "+91"+mobile,
       });
       let {generateOTP, success} = response.data;
@@ -57,7 +57,7 @@ function Signup() {
     setIsContinue(true);
     try {
       const response = await axios.post(
-        "https://full-stack-stock-monitoring-tool-d7k4.onrender.com/mobile-verification",
+        "https://full-stack-stock-monitoring-tool-9qmj.onrender.com/mobile-verification",
         {
           phoneNumber:mobile,
         }

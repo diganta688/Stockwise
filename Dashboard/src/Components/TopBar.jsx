@@ -13,7 +13,7 @@ function TopBar() {
   const update = async () => {
     try {
       let res = await axios.post(
-        "https://full-stack-stock-monitoring-tool-d7k4.onrender.com/update-stock-wishlist",
+        "https://full-stack-stock-monitoring-tool-9qmj.onrender.com/update-stock-wishlist",
         {
           names: ["^BSESN", "^NSEI"],
         }
