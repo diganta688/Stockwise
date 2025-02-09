@@ -1,0 +1,5 @@
+.env
+node_modules/
+orders.json
+transactions.json
+wallet.json

@@ -1,0 +1,304 @@
+html,
+body {
+  overflow-x: hidden;
+}
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  margin: 0 auto; /* Ensures proper centering */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-width: 320px;
+  min-height: 100vh;
+  box-sizing: border-box; /* Include padding and border in dimensions */
+}
+
+a {
+  font-weight: 500;
+  text-decoration: none;
+}
+
+a{
+  color: #000dff85;
+  font-weight: 500;
+}
+a:hover {
+  color: #535bf2;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+button:hover {
+  border-color: #646cff;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+
+  a:hover {
+    color: #747bff;
+  }
+
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+.red{
+  color:yellow; ;
+  background-color: transparent;
+}
+
+.home-hero {
+  display: flex;
+  justify-content: center;
+}
+
+.navbar {
+  position: sticky;
+  background-color: rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+.nav-link {
+  margin-right: 25px;
+  font-weight: 450;
+}
+
+.stock-copy-right {
+  font-size: 14px;
+}
+
+.border-top {
+  background: #fbfbfb;
+}
+
+.social-icon {
+  font-size: 21px;
+}
+
+.social-icon i {
+  margin-right: 20px;
+  color: #00000081;
+}
+
+.footer-first {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.footer-first-col {
+  width: 22%;
+
+}
+
+.foot-li {
+  list-style-type: none;
+  font-weight: 500;
+  color: #00000081;
+  cursor: pointer;
+  margin-bottom: 3px;
+
+  &:hover {
+    color: rgb(56, 126, 209);
+  }
+}
+
+.nav-head {
+  color: black;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.footer-info {
+  width: 1144px;
+  line-height: 1.8;
+  font-size: .68rem;
+  color: #00000081;
+}
+
+.footer-container {
+  padding: 3rem 3rem 0 3rem;
+}
+
+.footer-last-content {
+  width: 1144px;
+  color: #9b9b9b;
+  line-height: 4;
+  font-size: .75rem;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.footer-last-content div {
+  margin-right: 20px;
+}
+
+.red{
+  color: rgb(56, 126, 209);
+
+}
+
+
+.about-first-row{
+  padding: 100px 0 100px 0;
+  font-size: 2rem;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.imageFounder img{
+  width: 50%;
+  border-radius: 50%;
+}
+
+.people{
+  font-size: 2rem;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.product-hero{
+  /* padding-bottom: 5rem; */
+  font-size: 3rem;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.product-hero-sub{
+  font-size: 1rem;
+}
+
+.row-first-product{
+  padding: 100px 0 100px 0;
+
+}
+
+.product-univerce-partners{
+  color: #000;
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 13px;
+  width: 250px;
+}
+
+.partners{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  text-align: center;
+}
+
+
+
+.tabs button {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  color: #000;
+}
+
+.tabs button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.tabs button.active-tab {
+  color: #007bff;
+  font-weight: bold;
+  border-bottom: 2px solid #007bff;
+}
+
+.support-links-top{
+  margin-top: 10px;
+  padding-left: 55px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  font-size: 18px;
+  margin-bottom: 15%;
+}
+
+.support-links-top a{
+  color: white !important;
+  text-decoration: underline; 
+}
+
+.track-ticket{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.track-ticket-sub{
+  width: 151px;
+}
+
+.support-main{
+  background: #387ed1;
+  color: white;
+}
+
+.MuiSvgIcon-root{
+  margin-bottom: 8px;
+}

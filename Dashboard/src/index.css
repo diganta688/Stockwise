@@ -1,0 +1,280 @@
+html,
+body {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.MuiInputBase-colorPrimary {
+  width: 90%;
+}
+
+.nifty-div {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.nifty-div span {
+  margin-right: 10px;
+}
+
+.menu-main {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.menu-main a {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.562);
+  font-weight: 600;
+
+  &:hover {
+    color: orange;
+  }
+}
+
+.menu-main ul {
+  display: flex;
+  list-style-type: none;
+  margin-bottom: 0;
+}
+
+.menu-main li {
+  margin-right: 1.5rem;
+}
+
+.prifile-main {
+  display: flex;
+}
+
+.notification {
+  margin: 0 30px;
+}
+
+.menu {
+  border-right: 1 .5px solid black;
+}
+
+.Wishlist {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding-right: 0 !important;
+  scrollbar-color: transparent;
+  scrollbar-width: auto;
+}
+
+.Wishlist::-webkit-scrollbar {
+  border-radius: 10px;
+  width: 8px;
+}
+
+.Wishlist::-webkit-scrollbar-track {
+  background: rgba(15, 15, 15, 0.034);
+}
+
+.Wishlist::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.11);
+  border-radius: 10px;
+}
+
+.dashboard {
+  padding-bottom: 5rem !important;
+  margin-bottom: 2rem;
+  height: 100vh;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  scrollbar-color: transparent;
+  scrollbar-width: auto;
+}
+
+.dashboard::-webkit-scrollbar {
+  border-radius: 10px;
+  width: 8px;
+}
+
+.dashboard::-webkit-scrollbar-track {
+  background: rgba(15, 15, 15, 0.034);
+}
+
+.dashboard::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.199);
+  border-radius: 10px;
+}
+
+.profit {
+  color: green;
+}
+
+.loss {
+  color: red;
+}
+
+.order-table {
+  padding: 50px 0 50px 45px;
+}
+
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+thead th {
+  /* background-color: #00000071; */
+  border-bottom: 2px solid rgba(0, 0, 0, 0.342);
+  color: rgb(0, 0, 0);
+  font-size: 16px;
+  padding: 12px 8px;
+  text-align: left;
+}
+
+tbody td {
+  padding: 12px 15px;
+  font-size: 16px;
+  color: #333;
+}
+
+tbody tr:hover {
+  background-color: #000000;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+caption {
+  font-size: 20px;
+  font-weight: bold;
+  color: #4CAF50;
+  margin-bottom: 10px;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+
+.funds-add {
+  color: #00000057;
+  font-size: 12px;
+  margin-right: 1.5rem;
+  padding-top: 0.5rem;
+}
+
+.wishlist-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.438);
+  padding: 1.5rem 0;
+}
+
+.groth {
+  display: flex;
+  width: 35%;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 1rem;
+}
+
+.percentage p {
+  font-size: 13px;
+}
+
+.wishlist-item p {
+  margin: 0;
+}
+
+
+
+.wachlist-li:hover {
+  background-color: #6b6b6b1e;
+  cursor: pointer;
+}
+
+.name {
+  padding-left: 2rem;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+
+.actions {
+  position: relative;
+  margin: 0 auto;
+  width: 100%;
+  left: 80%;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  /* visibility: hidden; */
+}
+
+.actions button {
+  height: 30px !important;
+  /* margin-bottom: 1rem; */
+  padding: 0px 5px;
+  /* margin-right: 0.5rem; */
+  margin-left: 0.5rem;
+}
+
+.actions button svg {
+  padding-bottom: 3px;
+}
+
+.buy-sell-dialouge {
+  background-color: rgba(114, 114, 114, 0.23);
+  padding: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.holding-btn{
+  background-color: white;
+  border: none;
+  border-radius: 5px;
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+.active-tab {
+  color: #007bff;
+  font-weight: bold;
+  border-bottom: 2px solid #007bff;
+}
+
+.filtered-stock{
+  height: 70px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0.6;
+  font-weight: bold;
+  &:hover{
+    opacity: 1;
+    cursor: pointer;
+    background-color: #d6d1d121;
+    border-radius: 20px;
+  }
+}
