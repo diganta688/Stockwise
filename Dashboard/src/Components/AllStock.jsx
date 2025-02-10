@@ -26,7 +26,7 @@ function AllStock({ refreshWatchlist }) {
 
   const handleClick = async () => {
     try {
-      let response = await axios.post("https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/search-stock", {
+      let response = await axios.post(`${import.meta.env.VITE_API_URL}/search-stock`, {
         name: isSearchValue + ".NS",
       });
       if (response.status === 200) {
@@ -65,7 +65,7 @@ function AllStock({ refreshWatchlist }) {
     setSave(!save);
     try {
       const response = await axios.post(
-        `https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/addWishlist/${id}`,
+        `${import.meta.env.VITE_API_URL}/addWishlist/${id}`,
         {
           data: stockInfo,
           username: stockInfo,

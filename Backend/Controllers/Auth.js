@@ -34,7 +34,7 @@ module.exports.Signup = async (req, res) => {
     res.status(201).json({
       message: "User signed up successfully",
       success: true,
-      redirectTo: `full-stack-stock-monitoring-tool-ten.vercel.app/dashboard/${user._id}/summery`,
+      redirectTo: `${process.env.VITE_API_URL_DASHBOARD}/dashboard/${user._id}/summery`,
     });
   } catch (error) {
     console.log(error);
@@ -68,7 +68,7 @@ module.exports.Login = async (req, res) => {
     res.status(201).json({
       message: "User login up successfully",
       success: true,
-      redirectTo: `full-stack-stock-monitoring-tool-ten.vercel.app/dashboard/${user._id}/summery`,
+      redirectTo: `${process.env.VITE_API_URL_DASHBOARD}/dashboard/${user._id}/summery`,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

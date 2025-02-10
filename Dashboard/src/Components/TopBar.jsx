@@ -13,7 +13,7 @@ function TopBar() {
   const update = async () => {
     try {
       let res = await axios.post(
-        "https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/update-stock-wishlist",
+        `${import.meta.env.VITE_API_URL}/update-stock-wishlist`,
         {
           names: ["^BSESN", "^NSEI"],
         }

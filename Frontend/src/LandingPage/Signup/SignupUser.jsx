@@ -72,7 +72,7 @@ function SignupUser() {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/signup/final",
+        `${import.meta.env.VITE_API_URL}/signup/final`,
         {
           ...formData,
         },

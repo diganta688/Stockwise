@@ -7,7 +7,7 @@ function NotFound() {
 
   useEffect(() => {
     axios
-      .get("https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/non-exist-route")
+      .get(`${import.meta.env.VITE_API_URL}/non-exist-route`)
       .then((response) => {
         console.log("Response:", response);
       })

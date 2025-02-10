@@ -33,7 +33,7 @@ export default function SignupOtp() {
     try {
       setError("");
       setResendSuccess("");
-      const response = await axios.post("https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/signup/mobile", {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/signup/mobile`, {
         phoneNumber: "+91" + phone,
       });
       const { generateOTP } = response.data;
@@ -49,7 +49,7 @@ export default function SignupOtp() {
     if (otp === otpValid.current) {
       try {
         const response = await axios.post(
-          "https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/mobile-verification",
+          `${import.meta.env.VITE_API_URL}/mobile-verification`,
           {
             phoneNumber: phone,
           }

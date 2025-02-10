@@ -46,7 +46,7 @@ function Login() {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/login/final",
+        `${import.meta.env.VITE_API_URL}/login/final`,
         { ...formData },
         { withCredentials: true }
       );

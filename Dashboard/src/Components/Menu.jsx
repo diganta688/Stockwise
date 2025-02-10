@@ -28,14 +28,14 @@ function Menuu() {
     try {
       setAnchorElUser(null);
       let res = await axios.post(
-        "https://full-stack-stock-monitoring-tool-backend-fjip.onrender.com/logout",
+        `${import.meta.env.VITE_API_URL}/logout`,
         {},
         {
           withCredentials: true,
         }
       );
       if (res.data.success) {
-        window.open("http://localhost:5173/signup", "_blank");
+        window.open(`${import.meta.env.VITE_API_URL_FRONTEND}/signup`, "_blank");
         window.close();
       }
     } catch (e) {
