@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
-import Button from '@mui/material/Button';
 import TopBar from "./TopBar";
 import Dashboard from "./Dashboard";
 import { uidContext } from "../Content/context";
 import axios from "axios";
-import { ToastContainer, toast, Flip } from "react-toastify";
+import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Home() {
@@ -21,7 +20,7 @@ function Home() {
 
     } catch (error) {
       console.error("Session expired:", error);
-      window.location.href = `${import.meta.env.VITE_API_URL_FRONTEND}/signup`;
+      window.location.href = `${import.meta.env.VITE_API_URL_FRONTEND}`;
     }
   };
 
