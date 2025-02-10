@@ -134,7 +134,7 @@ const Funds = () => {
 
     try {
       const orderResponse = await axios.post(
-        "http://localhost:8080/create-order",
+        `${import.meta.env.VITE_API_URL}/create-order`,
         {
           amount: amount * 100,
           currency: "INR",
