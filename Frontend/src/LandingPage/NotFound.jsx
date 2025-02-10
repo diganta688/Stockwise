@@ -32,13 +32,13 @@ function NotFound() {
               <>
                 <h1 className="fs-2">{error.status} Page Not Found</h1>
                 <p>{typeof error.data === 'object' ? error.data.error : error.data} 
-                  <Link to="/"> Zerodha’s home page</Link>
+                  <Link to="/"> TradeSphere's home page</Link>
                 </p>
               </>
             ) : (
               <>
                 <h1 className="fs-2">500 An unexpected error occurred.</h1>
-                <p><Link to="/">Zerodha’s home page</Link></p>
+                <p><Link to="/">TradeSphere's home page</Link></p>
               </>
             )}
           </div>

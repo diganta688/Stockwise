@@ -292,11 +292,14 @@ app.post(
 );
 
 app.delete(
-  "/delete-order/:id",
+  "/delete-order/:orderid/:id",
   wrapasync(async (req, res) => {
     try {
-      const { id } = req.params;
-      const result = await OrderModel.deleteOne({ _id: id });
+      const { orderid, id } = req.params;
+      console.log(orderid);
+      console.log(id);
+      const result = await OrderModel.deleteOne({ _id: orderid });
+      await UserModel.findByIdAndUpdate(id, { $pull: { orders: orderid } });
       if (result.deletedCount === 0) {
         return res.status(404).json({ message: "Order not found" });
       }

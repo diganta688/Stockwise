@@ -20,7 +20,7 @@ function Home() {
 
     } catch (error) {
       console.error("Session expired:", error);
-      window.location.href = `${import.meta.env.VITE_API_URL_FRONTEND}`;
+      window.location.href = `${import.meta.env.VITE_API_URL_FRONTEND}/signup`;
     }
   };
 

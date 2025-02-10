@@ -21,9 +21,8 @@ function Order() {
             const timeDiff = currentDate - orderDate;
             if (timeDiff >= 24 * 60 * 60 * 1000) {
               axios
-                .delete(`${import.meta.env.VITE_API_URL}/delete-order/${order._id}`)
+                .delete(`${import.meta.env.VITE_API_URL}/delete-order/${order._id}/${id}`)
                 .then(() => {
-                  console.log(`Order ${order._id} deleted.`);
                   setallOrders((prevOrders) =>
                     prevOrders.filter((o) => o._id !== order._id)
                   );

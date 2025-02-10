@@ -4,8 +4,12 @@ import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import BubbleChartIcon from "@mui/icons-material/BubbleChart";
+import { useNavigate } from "react-router-dom";
+
 
 function Ticket() {
+  const navigate = useNavigate();
+
   return (
     <div className="container text-muted">
       <div className="row">
@@ -23,8 +27,8 @@ function Ticket() {
           </div>
           <div className="px-3 py-2">
             <ul style={{ listStyleType: "none" }}>
-              <li className="pb-3">
-                <a href="">Getting started</a>
+              <li className="foot-li pb-3" onClick={() => navigate("/signup")} style={{color: "#000dff85"}}>
+              Getting started
               </li>
               <li className="pb-3">
                 <a href="">Online</a>
@@ -48,7 +52,7 @@ function Ticket() {
           <div className="">
             <PermIdentityIcon />
             <p style={{ display: "inline", marginLeft: "0.5rem" }}>
-              Your Zerodha Account
+              Your TradeSphere Account
             </p>
           </div>
           <div className="px-3 py-2">
@@ -134,7 +138,7 @@ function Ticket() {
           <div className="">
             <BubbleChartIcon />
             <p style={{ display: "inline", marginLeft: "0.5rem" }}>
-              Your Zerodha Account
+              Your TradeSphere Account
             </p>
           </div>
           <div className="px-3 py-2">

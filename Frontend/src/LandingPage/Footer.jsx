@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function Footer() {
+  const navigate = useNavigate();
   return (
     <div className="border-top">
       <div className="container footer-container">
@@ -13,7 +15,7 @@ function Footer() {
               className="mb-4 mt-1"
             />
             <p className="stock-copy-right">
-              © 2010 - 2024, Zerodha Broking Ltd. All rights reserved.
+              © 2010 - 2024, TradeSphere Broking Ltd. All rights reserved.
             </p>
             <div className="social-icon ">
               <div className="border-bottom p-1">
@@ -50,13 +52,13 @@ function Footer() {
                 <li className="foot-li">Careers</li>
               </a>
               <a href="">
-                <li className="foot-li">Zerodha.tech</li>
+                <li className="foot-li">TradeSphere.tech</li>
               </a>
               <a href="">
                 <li className="foot-li">Press & media</li>
               </a>
               <a href="">
-                <li className="foot-li">Zerodha Cares</li>
+                <li className="foot-li">TradeSphere Cares</li>
               </a>
             </ul>
           </div>
@@ -99,9 +101,11 @@ function Footer() {
               <a href="">
                 <li className="nav-head mb-3 foot-li">Account</li>
               </a>
-              <a href="">
-                <li className="foot-li">Open an account</li>
-              </a>
+
+              <li className="foot-li" onClick={() => navigate("/signup")}>
+                Open an account
+              </li>
+
               <a href="">
                 <li className="foot-li">Fund transfer</li>
               </a>
@@ -110,15 +114,16 @@ function Footer() {
         </div>
         <div className="footer-info">
           <p>
-            Zerodha Broking Ltd.: Member of NSE, BSE​ &​ MCX – SEBI Registration
-            no.: INZ000031633 CDSL/NSDL: Depository services through Zerodha
-            Broking Ltd. – SEBI Registration no.: IN-DP-431-2019 Commodity
-            Trading through Zerodha Commodities Pvt. Ltd. MCX: 46025; NSE-50001
-            – SEBI Registration no.: INZ000038238 Registered Address: Zerodha
-            Broking Ltd., #153/154, 4th Cross, Dollars Colony, Opp. Clarence
-            Public School, J.P Nagar 4th Phase, Bengaluru - 560078, Karnataka,
-            India. For any complaints pertaining to securities broking please
-            write to complaints@zerodha.com, for DP related to dp@zerodha.com.
+            TradeSphere Broking Ltd.: Member of NSE, BSE​ &​ MCX – SEBI
+            Registration no.: INZ000031633 CDSL/NSDL: Depository services
+            through TradeSphere Broking Ltd. – SEBI Registration no.:
+            IN-DP-431-2019 Commodity Trading through TradeSphere Commodities
+            Pvt. Ltd. MCX: 46025; NSE-50001 – SEBI Registration no.:
+            INZ000038238 Registered Address: TradeSphere Broking Ltd., #153/154,
+            4th Cross, Dollars Colony, Opp. Clarence Public School, J.P Nagar
+            4th Phase, Bengaluru - 560078, Karnataka, India. For any complaints
+            pertaining to securities broking please write to
+            complaints@TradeSphere.com, for DP related to dp@TradeSphere.com.
             Please ensure you carefully read the Risk Disclosure Document as
             prescribed by SEBI | ICF
           </p>
@@ -159,8 +164,8 @@ function Footer() {
             of allotment. In case of non allotment the funds will remain in your
             bank account. As a business we don't give stock tips, and have not
             authorized anyone to trade on behalf of others. If you find anyone
-            claiming to be part of Zerodha and offering such services, please
-            create a ticket here.
+            claiming to be part of TradeSphere and offering such services,
+            please create a ticket here.
           </p>
         </div>
         <div className="row text-center">
@@ -168,7 +173,7 @@ function Footer() {
             <li className="foot-li">NSE</li>
             <li className="foot-li">BSE</li>
             <li className="foot-li">MCX</li>
-            <li className="foot-li" >Terms & conditions</li>
+            <li className="foot-li">Terms & conditions</li>
             <li className="foot-li">Policies & procedures</li>
             <li className="foot-li">Privacy policy</li>
             <li className="foot-li">Disclosure</li>

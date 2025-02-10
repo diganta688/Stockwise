@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect,useState } from "react";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import { NavLink } from "react-router-dom";
 import Box from "@mui/material/Box";
@@ -8,20 +8,37 @@ import Menu from "@mui/material/Menu";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { uidContext } from "../Content/context";
-import { ToastContainer, toast, Flip } from "react-toastify";
+import {toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 function Menuu() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const settings = ["Profile", "Setting", "Logout"];
   const { uId } = useContext(uidContext);
-
-  const handleOpenUserMenu = (event) => {
+    const [userr, setUserr] = useState({});
+  
+  
+  const toto =()=>{
+    toast.info("You don't have any notification", { position: "top-right" , autoclose: 2000});
+  }
+  const handleOpenUserMenu = async(event) => {    
     setAnchorElUser(event.currentTarget);
+    try {
+      let userRes = await axios.post(
+        `${import.meta.env.VITE_API_URL}/user/find`,
+        {
+          uId: uId,
+        },
+        { withCredentials: true }
+      );
+      const { user } = userRes.data;      
+      setUserr(user);
+    } catch (error) {
+      toast.error("something went wrong", { position: "top-right" , autoclose: 2000})
+    }
+
   };
 
   const logout = async () => {
@@ -39,12 +56,16 @@ function Menuu() {
         window.close();
       }
     } catch (e) {
-            toast.error(e, { position: "top-right" , autoclose: 2000});
+      toast.error(e, { position: "top-right" , autoclose: 2000});
     }
   };
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const user = async()=>{
+    
+  }
   return (
     <div className="col-8 menu-main">
       
@@ -101,7 +122,7 @@ function Menuu() {
       </div>
       <div className="prifile-main">
         <div className="mt-2 notification">
-          <NotificationsOutlinedIcon />
+          <NotificationsOutlinedIcon style={{cursor: "pointer"}} onClick={toto} />
         </div>
         <div className="" style={{ paddingRight: "1rem" }}>
           <div className="">
@@ -144,13 +165,7 @@ function Menuu() {
                         marginRight: "1rem",
                       }}
                     />
-                    Diganta
-                  </Typography>
-                </MenuItem>
-                <MenuItem key={0} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    <SettingsIcon style={{ marginRight: "1rem" }} />
-                    Settings
+                    {userr.username}
                   </Typography>
                 </MenuItem>
                 <MenuItem key={1} onClick={logout}>

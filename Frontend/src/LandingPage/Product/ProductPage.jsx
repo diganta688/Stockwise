@@ -25,7 +25,7 @@ function ProductPage() {
     Title: ["Console", "Kite Connect API"],
     description: [
       "Build powerful trading platforms and experiences with our super simple HTTP/JSON APIs. If you are a startup, build your investment app and showcase it to our clientbase.",
-      "The central dashboard for your Zerodha account. Gain insights into your trades and investments with in-depth reports and visualisations.",
+      "The central dashboard for your TradeSphere account. Gain insights into your trades and investments with in-depth reports and visualisations.",
     ],
   };
   return (

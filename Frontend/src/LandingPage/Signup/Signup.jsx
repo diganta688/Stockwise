@@ -148,10 +148,10 @@ function Signup() {
       </div>
       <div className="row text-center">
         <p className="disclaimer">
-          I authorise Zerodha to contact me even if my number is registered on
-          DND. I authorise Zerodha to fetch my KYC information from the C-KYC
+          I authorise TradeSphere to contact me even if my number is registered on
+          DND. I authorise TradeSphere to fetch my KYC information from the C-KYC
           registry with my PAN. Please visit <a href="/">this article</a> to
-          know more. By submitting your contact details, you authorize Zerodha
+          know more. By submitting your contact details, you authorize TradeSphere
           to contact you even if you are registered on DND & conduct online KYC
           for trading & demat account opening as per KRA regulations and PMLA
           guidelines. If you are looking to open a HUF, Corporate, Partnership,

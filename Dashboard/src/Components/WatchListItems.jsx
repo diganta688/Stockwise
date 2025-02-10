@@ -24,11 +24,12 @@ function WatchListItems({ stock, refreshWatchlist }) {
           <div className={stock.percent.includes('-') ? "loss name" : "profit name"}>
             <p>{stock.name}</p>
           </div>
-          <div className="options">
+          <div className="">
             {isMouseEnter && (
               <WatchListButtons
                 uid={stock}
                 refreshWatchlist={refreshWatchlist}
+                setIsMouseEnter={setIsMouseEnter}
               />
             )}
           </div>

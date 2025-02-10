@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Chart } from "./Chart";
-import { ToastContainer, toast, Flip } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function Summery() {
+function Summery({ watchlistUpdated }) {
   let { id } = useParams();
   const [allHoldings, setAllHoldings] = useState([]);
   const [totalCurrValue, setTotalCurrValue] = useState(0);
@@ -35,14 +35,16 @@ function Summery() {
         const { user } = userRes.data;
         setUserr(user);
       } catch (error) {
-        toast.error(error, { position: "top-right" , autoclose: 2000}); 
+        toast.error(error, { position: "top-right", autoclose: 2000 });
       }
     };
-    axios.get(`${import.meta.env.VITE_API_URL}/allwishlist/${id}`).then((res) => {
-      setAllWishlist(res.data.wishlists);
-    });
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/allwishlist/${id}`)
+      .then((res) => {
+        setAllWishlist(res.data.wishlists);
+      });
     fetchData();
-  }, [id]);
+  }, [id, watchlistUpdated]);
   const data = {
     labels: allWishlist.map((a) => a["name"]),
     datasets: [

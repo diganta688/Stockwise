@@ -22,9 +22,9 @@ function BuySellDial({ isOpen, setIsopen, uid }) {
   const [exPrice, setExpPrice] = useState(stock.price);
   const [isPlacedOrder, setIsPlacedOrder] = useState(false);
   const mouse = useContext(counterContext);
-    const [walletBalance, setWalletBalance] = useState(0);
+  const [walletBalance, setWalletBalance] = useState(0);
   const [balence, setBalence] = useState("");
- 
+
   let fetchData = async () => {
     try {
       let res = await axios.post(
@@ -33,8 +33,7 @@ function BuySellDial({ isOpen, setIsopen, uid }) {
       setStock(res.data.message);
     } catch (error) {
       console.log(error);
-            toast.error(error, { position: "top-right" , autoclose: 2000});
-      
+      toast.error(error, { position: "top-right", autoclose: 2000 });
     }
   };
 
@@ -61,33 +60,42 @@ function BuySellDial({ isOpen, setIsopen, uid }) {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/wallet-balance/${id}`
       );
-      setWalletBalance(response.data.balance);
-      if(walletBalance>=price){
-        toast.success("Stock buy Successfull", { position: "top-right" , autoclose: 2000});
+      const currentBalance = response.data.balance;
+      setWalletBalance(currentBalance);
+
+      if (currentBalance >= price) {
+        toast.success("Stock buy Successful", {
+          position: "top-right",
+          autoClose: 2000,
+        });
         setIsPlacedOrder(true);
+
         setTimeout(async () => {
           setIsPlacedOrder(false);
           setIsopen(false);
           mouse.setIsMouseEnter(false);
-          await axios.post(`${import.meta.env.VITE_API_URL}/addOrder/${id}/${uid}`, {
-            price: price,
-            qty: qty,
-            mode: "BUY",
-          });
+          await axios.post(
+            `${import.meta.env.VITE_API_URL}/addOrder/${id}/${uid}`,
+            {
+              price: price,
+              qty: qty,
+              mode: "BUY",
+            }
+          );
         }, 4000);
+
         await axios.post(
           `${import.meta.env.VITE_API_URL}/buy-stock-balence/${id}`,
           {
             amount: Number(price),
           }
         );
-      }else{
-        setBalence("Dont have enough balence");
+      } else {
+        setBalence("Don't have enough balance");
       }
     } catch (error) {
-      toast.error(error, { position: "top-right" , autoclose: 2000});
+      toast.error(error.message, { position: "top-right", autoClose: 2000 });
     }
-    
   };
 
   const handleQtyChange = (e) => {
@@ -155,7 +163,9 @@ function BuySellDial({ isOpen, setIsopen, uid }) {
                 />
               </div>
             </div>
-            {balence && <p style={{color:"red", fontSize: "12px"}}>{balence}</p>}
+            {balence && (
+              <p style={{ color: "red", fontSize: "12px" }}>{balence}</p>
+            )}
             {isPlacedOrder && (
               <>
                 <CircularProgress

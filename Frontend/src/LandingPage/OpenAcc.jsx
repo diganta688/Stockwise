@@ -6,7 +6,7 @@ function OpenAcc() {
   return (
     <div className="container p-5 mb-5">
       <div className="row text-center home-hero">
-        <h1 className="fs-2">Open a Zerodha account</h1>
+        <h1 className="fs-2">Open a TradeSphere account</h1>
         <p>
           Modern platforms and apps, ₹0 investments, and flat ₹20 intraday and
           F&O trades.
