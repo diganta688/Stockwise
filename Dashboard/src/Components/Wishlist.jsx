@@ -10,29 +10,36 @@ function Wishlist({ watchlistUpdated, refreshWatchlist }) {
   const [allWishlist, setAllWishlist] = useState([]);
   const getData = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/allwishlist/${id}`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/allwishlist/${id}`, {
+        withCredentials: true
+      });
       setAllWishlist(res.data.wishlists);
     } catch (error) {
       toast.error(error, { position: "top-right", autoclose: 2000 });
     }
   };
 
-  const update =async ()=>{
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/update-wishlist`,
-      {
-        data: allWishlist,
-      }
-    );
-  }
+  const update = async () => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/update-wishlist`,
+        {
+          userId: id,
+          data: allWishlist,
+        },
+        { withCredentials: true }
+      );
+    } catch (error) {
+      toast.error("Failed to update wishlist");
+    }
+  };
   const updateStockData = async () => {
     if (allWishlist.length > 0) {
       try {
         const response = await axios.post(
           `${import.meta.env.VITE_API_URL}/update-stock-wishlist`,
-          {
-            names: allWishlist.map((item) => item.name),
-          }
+          { names: allWishlist.map((item) => item.name) },
+          { withCredentials: true }
         );
 
         if (response.status === 200) {
@@ -67,7 +74,7 @@ function Wishlist({ watchlistUpdated, refreshWatchlist }) {
             return item;
           });
 
-          setAllWishlist(updatedWishlist);
+          setAllWishlist(prev => [...updatedWishlist]);
           setTimeout(() => {
             update();
           }, 1000);
@@ -87,9 +94,9 @@ function Wishlist({ watchlistUpdated, refreshWatchlist }) {
     const interval = setInterval(() => {
       updateStockData();
     }, 2000);
-
+  
     return () => clearInterval(interval);
-  }, [allWishlist]);
+  }, []);
 
   return (
     <div className="row">

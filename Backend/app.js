@@ -103,6 +103,7 @@ app.post(
     try {
       await WishlistModel.findByIdAndDelete(data);
       await UserModel.findByIdAndUpdate(id, { $pull: { wishlists: data } });
+      res.json({ message: "Wishlist item deleted successfully" });
     } catch (e) {
       res.status(500).json({ message: "Internal server error" });
     }
