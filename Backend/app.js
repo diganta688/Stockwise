@@ -258,7 +258,7 @@ app.post(
       let { id, uid } = req.params;
       let user = await UserModel.findById(id);
       let wishlist = await WishlistModel.findById(uid);
-      let addOrder = new OrderModel({
+      let addOrder = await OrderModel.create({
         name: wishlist.name,
         qty: req.body.qty,
         price: req.body.price,
@@ -268,7 +268,7 @@ app.post(
       await addOrder.save();
       const quote = await yahooFinance.quote(wishlist.name);
       let avg = req.body.price / req.body.qty;
-      const newHoldings = new HoldingModel({
+      const newHoldings = await HoldingModel.create({
         name: wishlist.name,
         qty: req.body.qty,
         avg: avg,
@@ -277,7 +277,6 @@ app.post(
         net: quote.regularMarketPrice - avg,
         day: quote.regularMarketChangePercent,
       });
-      await newHoldings.save();
       user.holdings.push(newHoldings);
       await user.save();
       res
