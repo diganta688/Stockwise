@@ -26,8 +26,8 @@ module.exports.Signup = async (req, res) => {
     const token = generateToken(user._id);
     res.cookie('jwt', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Strict',
+      secure: true,
+      sameSite: 'None',
       maxAge: 24 * 60 * 60 * 1000
     });
 
@@ -83,7 +83,7 @@ exports.protect = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await UserModel.findById(decoded.id);
-    if (!user || req.params.id !== user._id.toString()) {
+    if (!user) {
       return res.status(403).json({ status: false, message: 'Access denied' });
     }
     req.user = user;
@@ -94,10 +94,10 @@ exports.protect = async (req, res, next) => {
 };
 
 module.exports.logout = (req, res) => {
-  res.cookie('jwt', 'loggedout', {
-    expires: new Date(Date.now() + 1000),
+  res.cookie('jwt', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production'
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict'
   });
   res.status(200).json({ success: true, message: 'Logged out successfully' });
 };
