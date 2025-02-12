@@ -94,10 +94,10 @@ exports.protect = async (req, res, next) => {
 };
 
 module.exports.logout = (req, res) => {
-  res.cookie('jwt', token, {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 1000),
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'Strict'
+    secure: process.env.NODE_ENV === 'production'
   });
   res.status(200).json({ success: true, message: 'Logged out successfully' });
 };
