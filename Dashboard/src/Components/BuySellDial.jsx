@@ -57,31 +57,44 @@ function BuySellDial({ isOpen, setIsopen, uid }) {
 
   const handleSubmit = async () => {
     try {
-      const balanceResponse = await axios.get(
-        `${import.meta.env.VITE_API_URL}/wallet-balance/${id}`,
-        { withCredentials: true }
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/wallet-balance/${id}`
       );
-      if (balanceResponse.data.balance >= price) {
-        const orderResponse = await axios.post(
-          `${import.meta.env.VITE_API_URL}/addOrder/${id}/${uid}`,
-          {
-            price: price,
-            qty: qty,
-            mode: "BUY",
-          },
-          { withCredentials: true }
-        );
-        if (orderResponse.status === 201) {
+      const currentBalance = response.data.balance;
+      setWalletBalance(currentBalance);
+
+      if (currentBalance >= price) {
+        toast.success("Stock buy Successful", {
+          position: "top-right",
+          autoClose: 2000,
+        });
+        setIsPlacedOrder(true);
+
+        setTimeout(async () => {
+          setIsPlacedOrder(false);
+          setIsopen(false);
+          mouse.setIsMouseEnter(false);
           await axios.post(
-            `${import.meta.env.VITE_API_URL}/buy-stock-balence/${id}`,
-            { amount: Number(price) },
-            { withCredentials: true }
+            `${import.meta.env.VITE_API_URL}/addOrder/${id}/${uid}`,
+            {
+              price: price,
+              qty: qty,
+              mode: "BUY",
+            }
           );
-          window.location.reload();
-        }
+        }, 4000);
+
+        await axios.post(
+          `${import.meta.env.VITE_API_URL}/buy-stock-balence/${id}`,
+          {
+            amount: Number(price),
+          }
+        );
+      } else {
+        setBalence("Don't have enough balance");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Order failed");
+      toast.error(error.message, { position: "top-right", autoClose: 2000 });
     }
   };
 
