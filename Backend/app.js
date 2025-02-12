@@ -255,10 +255,13 @@ app.post(
   "/addOrder/:id/:uid",
   wrapasync(async (req, res, next) => {
     try {      
-      let { id, uid } = req.params;
-      let user = await UserModel.findById(id);
-      let wishlist = await WishlistModel.findById(uid);
-      let addOrder = await OrderModel.create({
+      const { id, uid } = req.params;
+      const user = await UserModel.findById(id);
+      if (!user) return res.status(404).json({ message: "User not found" });
+      const wishlist = await WishlistModel.findById(uid);
+      if (!wishlist) return res.status(404).json({ message: "Stock not found" });
+      const addOrder = await OrderModel.create({
+        user: id,
         name: wishlist.name,
         qty: req.body.qty,
         price: req.body.price,
@@ -282,14 +285,12 @@ app.post(
       res
         .status(201)
         .json({ success: true, message: "Order added successfully" });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: `Error adding order: ${error.message}`,
-      });
-    }
-  })
-);
+      } catch (error) {
+        console.error("Order error:", error);
+        res.status(500).json({ message: "Order creation failed", error: error.message });
+      }
+    })
+  );
 
 app.delete(
   "/delete-order/:orderid/:id",
