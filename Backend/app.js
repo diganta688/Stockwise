@@ -435,9 +435,7 @@ app.post("/create-order", async (req, res) => {
       receipt: order.receipt,
       status: "created",
     });
-
     await newOrder.save();
-
     res.json(order);
   } catch (error) {
     console.error("Order creation error:", error);
