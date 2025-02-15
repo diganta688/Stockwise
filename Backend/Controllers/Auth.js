@@ -87,6 +87,7 @@ exports.protect = async (req, res, next) => {
       return res.status(403).json({ status: false, message: 'Access denied' });
     }
     return res.status(201).json({status: true});
+    
   } catch (error) {
     return res.status(401).json({ status: false, message: 'Invalid token' });
   }
