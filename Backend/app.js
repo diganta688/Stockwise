@@ -14,6 +14,9 @@ const { HoldingModel } = require("./model/Holdings");
 const { OrderModel } = require("./model/Orders");
 const { WishlistModel } = require("./model/Wishlist");
 const { UserModel } = require("./model/User");
+const OrderPayment = require("./model/OrderPayment");
+const Wallet = require ("./model/Wallet");
+const Transaction = require("./model/Transaction");
 const expresserr = require("./extra/expressErr");
 const wrapasync = require("./extra/wrapasync");
 const cookieParser = require("cookie-parser");
@@ -297,8 +300,6 @@ app.delete(
   wrapasync(async (req, res) => {
     try {
       const { orderid, id } = req.params;
-      console.log(orderid);
-      console.log(id);
       const result = await OrderModel.deleteOne({ _id: orderid });
       await UserModel.findByIdAndUpdate(id, { $pull: { orders: orderid } });
       if (result.deletedCount === 0) {
@@ -423,39 +424,24 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZOR_PAY_SECRET,
 });
 
-const ordersFile = "orders.json";
-
-const readOrders = () => {
-  if (fs.existsSync(ordersFile)) {
-    return JSON.parse(fs.readFileSync(ordersFile));
-  }
-  return [];
-};
-
-const writeOrders = (orders) => {
-  fs.writeFileSync(ordersFile, JSON.stringify(orders, null, 2));
-};
-
 app.post("/create-order", async (req, res) => {
   try {
     const { amount, currency, receipt, notes } = req.body;
-
     const order = await razorpay.orders.create({
-      amount: amount,
-      currency: currency,
-      receipt: receipt,
-      notes: notes,
+      amount,
+      currency,
+      receipt,
+      notes,
     });
-
-    const orders = readOrders();
-    orders.push({
+    const newOrder = new OrderPayment({
       order_id: order.id,
       amount: order.amount,
       currency: order.currency,
       receipt: order.receipt,
       status: "created",
     });
-    writeOrders(orders);
+
+    await newOrder.save();
 
     res.json(order);
   } catch (error) {
@@ -464,140 +450,135 @@ app.post("/create-order", async (req, res) => {
   }
 });
 
-const walletFile = "wallet.json";
+app.post("/verify-payment/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const secret = process.env.RAZOR_PAY_SECRET;
+    const body = `${razorpay_order_id}|${razorpay_payment_id}`;
+    const expectedSignature = crypto.createHmac("sha256", secret)
+      .update(body)
+      .digest("hex");
 
-const readWallet = () => {
-  if (fs.existsSync(walletFile)) {
-    return JSON.parse(fs.readFileSync(walletFile));
-  }
-  return {};
-};
-
-const writeWallet = (wallet) => {
-  fs.writeFileSync(walletFile, JSON.stringify(wallet, null, 2));
-};
-
-const transactionsFile = "transactions.json";
-
-const readTransactions = () => {
-  if (fs.existsSync(transactionsFile)) {
-    return JSON.parse(fs.readFileSync(transactionsFile));
-  }
-  return [];
-};
-
-const writeTransactions = (transactions) => {
-  fs.writeFileSync(transactionsFile, JSON.stringify(transactions, null, 2));
-};
-
-app.post("/verify-payment/:id", (req, res) => {
-  let { id } = req.params;
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-  const secret = razorpay.key_secret;
-
-  const body = `${razorpay_order_id}|${razorpay_payment_id}`;
-  const expectedSignature = crypto.createHmac("sha256", secret)
-    .update(body)
-    .digest("hex");
-
-  if (expectedSignature === razorpay_signature) {
-    const orders = readOrders();
-    const orderIndex = orders.findIndex((o) => o.order_id === razorpay_order_id);
-
-    if (orderIndex !== -1) {
-      orders[orderIndex].status = "paid";
-      orders[orderIndex].payment_id = razorpay_payment_id;
-      writeOrders(orders);
-
-      const wallet = readWallet();
-      const amount = orders[orderIndex].amount / 100;
-      if (!wallet[id]) {
-        wallet[id] = 0;
-      }
-      wallet[id] += amount;
-      writeWallet(wallet);
-      const transactions = readTransactions();
-      transactions.push({
-        userId: id,
-        type: "deposit",
-        amount: amount,
-        date: new Date().toISOString(),
-      });
-      writeTransactions(transactions);
-
-      res.json({ status: "ok" });
+    if (expectedSignature !== razorpay_signature) {
+      return res.status(400).json({ status: "invalid signature" });
     }
-  } else {
-    res.status(400).json({ status: "invalid signature" });
+    const order = await OrderPayment.findOneAndUpdate(
+      { order_id: razorpay_order_id },
+      { status: "paid", payment_id: razorpay_payment_id },
+      { new: true }
+    );
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+    let wallet = await Wallet.findOne({ userId: id });
+
+    if (!wallet) {
+      wallet = new Wallet({ userId: id, balance: order.amount / 100 });
+    } else {
+      wallet.balance += order.amount / 100;
+    }
+    await wallet.save();
+    const transaction = new Transaction({
+      userId: id,
+      type: "deposit",
+      amount: order.amount / 100,
+    });
+    await transaction.save();
+    res.json({ status: "ok" });
+  } catch (error) {
+    console.error("Payment verification error:", error);
+    res.status(500).json({ error: "Error verifying payment" });
+  }
+});
+
+app.get("/wallet-balance/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const wallet = await Wallet.findOne({ userId: id });
+
+    res.json({ balance: wallet ? wallet.balance : 0 });
+  } catch (error) {
+    console.error("Wallet balance error:", error);
+    res.status(500).json({ error: "Error fetching wallet balance" });
+  }
+});
+
+app.get("/transaction-history/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const transactions = await Transaction.find({ userId: id });
+
+    res.json(transactions);
+  } catch (error) {
+    console.error("Transaction history error:", error);
+    res.status(500).json({ error: "Error fetching transaction history" });
   }
 });
 
 
-app.get("/wallet-balance/:id", (req, res) => {
-  let { id } = req.params;
-  const wallet = readWallet();
-  const userId = id;
-  const balance = wallet[userId] || 0;
-  res.json({ balance });
+
+app.post("/withdraw-funds/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { amount } = req.body;
+
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ error: "Invalid amount" });
+    }
+
+    const wallet = await Wallet.findOne({ userId: id });
+
+    if (!wallet || wallet.balance < amount) {
+      return res.status(400).json({ error: "Insufficient funds" });
+    }
+
+    wallet.balance -= amount;
+    await wallet.save();
+
+    const transaction = new Transaction({
+      userId: id,
+      type: "withdraw",
+      amount,
+    });
+
+    await transaction.save();
+
+    res.json({ status: "ok", newBalance: wallet.balance });
+  } catch (error) {
+    console.error("Withdraw funds error:", error);
+    res.status(500).json({ error: "Error withdrawing funds" });
+  }
 });
 
 
 
-app.get("/transaction-history/:id", (req, res) => {
-  let { id } = req.params;
-  const transactions = readTransactions();
-  const userTransactions = transactions.filter(txn => txn.userId === id);
-  res.json(userTransactions);
+app.post("/buy-stock-balence/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { amount } = req.body;    
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ error: "Invalid amount" });
+    }
+    const wallet = await Wallet.findOne({ userId: id });
+    if (!wallet || wallet.balance < amount) {
+      console.error(error); 
+      return res.status(400).json({ error: "Insufficient funds" });
+    }
+    wallet.balance -= amount;
+    await wallet.save();
+    const transaction = new Transaction({
+      userId: id,
+      type: "BUY Stock",
+      amount,
+    });
+    await transaction.save();
+    res.json({ status: "ok", newBalance: wallet.balance });
+  } catch (error) {
+    console.error("Buy stock error:", error);
+    res.status(500).json({ error: "Error buying stock" });
+  }
 });
-
-
-app.post("/withdraw-funds/:id", (req, res) => {
-  const { id } = req.params;
-  const { amount } = req.body;
-  if (!amount || amount <= 0) {
-    return res.status(400).json({ error: "Invalid amount" });
-  }
-  const wallet = readWallet();
-  if (!wallet[id] || wallet[id] < amount) {
-    return res.status(400).json({ error: "Insufficient funds" });
-  }
-  wallet[id] -= amount;
-  writeWallet(wallet);
-  const transactions = readTransactions();
-  transactions.push({
-    userId: id,
-    type: "withdraw",
-    amount: amount,
-    date: new Date().toISOString(),
-  });
-  writeTransactions(transactions);
-  res.json({ status: "ok", newBalance: wallet[id] });
-});
-app.post("/buy-stock-balence/:id", (req, res) => {
-  const { id } = req.params;
-  const { amount } = req.body;
-  if (!amount || amount <= 0) {
-    return res.status(400).json({ error: "Invalid amount" });
-  }
-  const wallet = readWallet();
-  if (!wallet[id] || wallet[id] < amount) {
-    return res.status(400).json({ error: "Insufficient funds" });
-  }
-  wallet[id] -= amount;
-  writeWallet(wallet);
-  const transactions = readTransactions();
-  transactions.push({
-    userId: id,
-    type: "BUY Stock",
-    amount: amount,
-    date: new Date().toISOString(),
-  });
-  writeTransactions(transactions);
-  res.json({ status: "ok", newBalance: wallet[id] });
-});
-
-
-
 
 app.post('/sell-stock', async (req, res) => {
   try {
@@ -621,51 +602,32 @@ app.post('/sell-stock', async (req, res) => {
         message: `Invalid quantity. Available: ${stock.qty}`
       });
     }
-    const user = await UserModel.findById(userId);
-    await user.save();
+    let wallet = await Wallet.findOne({ userId });
+    if (!wallet) {
+      wallet = new Wallet({ userId, balance: 0 });
+    }
     if (sellQty === stock.qty) {
       await HoldingModel.findByIdAndDelete(stockId);
-      await UserModel.findByIdAndUpdate(
-        userId,
-        { $pull: { holdings: stockId } }
-      );
-      const wallet = readWallet();
-      wallet[userId] += price;
-      writeWallet(wallet);
-      const transactions = readTransactions();
-      transactions.push({
-        userId: userId,
-        type: "SELLStock",
-        amount: price,
-        date: new Date().toISOString(),
-      });
-      writeTransactions(transactions);
+      await UserModel.findByIdAndUpdate(userId, { $pull: { holdings: stockId } });
     } else {
-      await HoldingModel.findByIdAndUpdate(
-        stockId,
-        { 
-          $inc: { qty: -sellQty },
-          $set: { priceBuy: stock.priceBuy - price }
-        }
-      );
-      const wallet = readWallet();
-      wallet[userId] += price;
-      writeWallet(wallet);
-      const transactions = readTransactions();
-      transactions.push({
-        userId: userId,
-        type: "SELLStock",
-        amount: price,
-        date: new Date().toISOString(),
+      await HoldingModel.findByIdAndUpdate(stockId, { 
+        $inc: { qty: -sellQty },
+        $set: { priceBuy: stock.priceBuy - price }
       });
-      writeTransactions(transactions);
     }
+    wallet.balance += price;
+    await wallet.save();
+    const transaction = new Transaction({
+      userId,
+      type: "SELLStock",
+      amount: price,
+    });
+    await transaction.save();
     res.status(200).json({
       success: true,
       message: `Sold ${sellQty} shares of ${stock.name}`,
-      newBalance: user.balance
+      newBalance: wallet.balance
     });
-
   } catch (error) {
     console.error('Sell error:', error);
     res.status(500).json({
@@ -675,6 +637,7 @@ app.post('/sell-stock', async (req, res) => {
     });
   }
 });
+
 app.get("/", (req, res)=>{
   res.send("hello");
 })

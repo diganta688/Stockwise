@@ -22,7 +22,6 @@ function BuySellDial({ isOpen, setIsopen, uid }) {
   const [exPrice, setExpPrice] = useState(stock.price);
   const [isPlacedOrder, setIsPlacedOrder] = useState(false);
   const mouse = useContext(counterContext);
-  const [walletBalance, setWalletBalance] = useState(0);
   const [balence, setBalence] = useState("");
 
   let fetchData = async () => {
@@ -57,20 +56,17 @@ function BuySellDial({ isOpen, setIsopen, uid }) {
 
   const handleSubmit = async () => {
     try {
-      // const response = await axios.get(
-      //   `${import.meta.env.VITE_API_URL}/wallet-balance/${id}`
-      // );
-      // const currentBalance = response.data.balance;
-      // setWalletBalance(currentBalance);
-
-      // if (currentBalance >= price) {
-        // toast.success("Stock buy Successful", {
-          // position: "top-right",
-          // autoClose: 2000,
-        // });
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/wallet-balance/${id}`
+      );
+      const currentBalance = response.data.balance;
+      if (currentBalance >= price) {
         setIsPlacedOrder(true);
-
         setTimeout(async () => {
+          toast.success("Stock buy Successful", {
+            position: "top-right",
+            autoClose: 2000,
+          });
           setIsPlacedOrder(false);
           setIsopen(false);
           mouse.setIsMouseEnter(false);
@@ -82,19 +78,20 @@ function BuySellDial({ isOpen, setIsopen, uid }) {
               mode: "BUY",
             }
           );
+          await axios.post(
+            `${import.meta.env.VITE_API_URL}/buy-stock-balence/${id}`,
+            {
+              amount: price,
+            }
+          );
         }, 4000);
-
-        // await axios.post(
-          // `${import.meta.env.VITE_API_URL}/buy-stock-balence/${id}`,
-          // {
-            // amount: Number(price),
-          // }
-        // );
-      // } else {
-        // setBalence("Don't have enough balance");
-      // }
+      } else {
+        setBalence("Don't have enough balance");
+      }
     } catch (error) {
       toast.error(error.message, { position: "top-right", autoClose: 2000 });
+      console.error(error.message);
+      
     }
   };
 
