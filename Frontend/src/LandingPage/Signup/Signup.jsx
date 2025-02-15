@@ -12,6 +12,7 @@ function Signup() {
   const [error, setError] = useState("");
   const [errorOtp, setErrorOtp] = useState("");
   const [isContinue, setIsContinue] = useState(false);
+  const [otpSent, setOtpSend] = useState(false);
   const navigate = useNavigate();
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -31,16 +32,23 @@ function Signup() {
   };
 
   const handleSubmit = async (e) => {
-    setIsContinue(false)
+    setIsContinue(false);
+    setOtpSend(true);
     e.preventDefault();
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/signup/mobile`, {
-        phoneNumber:  "+91"+mobile,
-      });
-      let {generateOTP, success} = response.data;
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/signup/mobile`,
+        {
+          phoneNumber: "+91" + mobile,
+        }
+      );
+      setOtpSend(false);
+      let { generateOTP, success } = response.data;
       if (response.data.redirectTo && success) {
-        setIsContinue(true);    
-        navigate(response.data.redirectTo, { state: { mobile, generateOTP, success } });
+        setIsContinue(true);
+        navigate(response.data.redirectTo, {
+          state: { mobile, generateOTP, success },
+        });
       } else {
         setIsContinue(true);
         setError("Unexpected response from server");
@@ -59,11 +67,13 @@ function Signup() {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/mobile-verification`,
         {
-          phoneNumber:mobile,
+          phoneNumber: mobile,
         }
       );
       if (response.data.redirectTo) {
-        navigate(response.data.redirectTo, { state: { mobile, SuccessMessage:true } });
+        navigate(response.data.redirectTo, {
+          state: { mobile, SuccessMessage: true },
+        });
       } else {
         setError("Unexpected response from server");
       }
@@ -128,7 +138,11 @@ function Signup() {
               )}
             </div>
             <div className="px-2 mb-2">
-              {isContinue ? (
+              {otpSent ? (
+                <button type="submit" className="btn btn-primary" disabled>
+                  Loading...
+                </button>
+              ) : isContinue ? (
                 <button type="submit" className="btn btn-primary">
                   Continue
                 </button>
@@ -148,15 +162,15 @@ function Signup() {
       </div>
       <div className="row text-center">
         <p className="disclaimer">
-          I authorise TradeSphere to contact me even if my number is registered on
-          DND. I authorise TradeSphere to fetch my KYC information from the C-KYC
-          registry with my PAN. Please visit <a href="/">this article</a> to
-          know more. By submitting your contact details, you authorize TradeSphere
-          to contact you even if you are registered on DND & conduct online KYC
-          for trading & demat account opening as per KRA regulations and PMLA
-          guidelines. If you are looking to open a HUF, Corporate, Partnership,
-          or NRI account, you have to use the <a href="/">offline forms</a>. For
-          help, <a href="/">click here</a>.
+          I authorise TradeSphere to contact me even if my number is registered
+          on DND. I authorise TradeSphere to fetch my KYC information from the
+          C-KYC registry with my PAN. Please visit <a href="/">this article</a>{" "}
+          to know more. By submitting your contact details, you authorize
+          TradeSphere to contact you even if you are registered on DND & conduct
+          online KYC for trading & demat account opening as per KRA regulations
+          and PMLA guidelines. If you are looking to open a HUF, Corporate,
+          Partnership, or NRI account, you have to use the{" "}
+          <a href="/">offline forms</a>. For help, <a href="/">click here</a>.
         </p>
       </div>
     </div>

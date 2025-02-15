@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
-import { ToastContainer, toast, Flip } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function SignupOtp() {
@@ -14,7 +14,8 @@ export default function SignupOtp() {
   const phone = location.state?.mobile;
   const otpValid = useRef(location.state?.generateOTP);
   const SuccessMessage = useRef(location.state?.success);
-
+  const [otpSent, setOtpSend] = useState(false);
+  
   useEffect(()=>{
     if(!SuccessMessage.current){
       navigate("/signup");
@@ -33,9 +34,11 @@ export default function SignupOtp() {
     try {
       setError("");
       setResendSuccess("");
+      setOtpSend(true)
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/signup/mobile`, {
         phoneNumber: "+91" + phone,
       });
+      setOtpSend(false)
       const { generateOTP } = response.data;
       otpValid.current = generateOTP;
       setResendSuccess("A new OTP has been sent to your mobile number.");
@@ -45,6 +48,7 @@ export default function SignupOtp() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setOtpSend(true);
     setError("");
     if (otp === otpValid.current) {
       try {
@@ -54,6 +58,7 @@ export default function SignupOtp() {
             phoneNumber: phone,
           }
         );
+        setOtpSend(false);
         if (response.data.redirectTo) {
           navigate(response.data.redirectTo, { state: { mobile: phone, SuccessMessage } });
         } else {
@@ -114,7 +119,18 @@ export default function SignupOtp() {
                   <p className="text-danger small">{error}</p>
                 </div>
               )}
-              <button
+              {
+                otpSent ? <button
+                type="submit"
+                style={{
+                  width: "80%",
+                  justifySelf: "center",
+                  marginBottom: "20px",
+                }}
+                disabled
+              >
+                loading...
+              </button> : <button
                 type="submit"
                 style={{
                   width: "80%",
@@ -124,6 +140,7 @@ export default function SignupOtp() {
               >
                 Submit
               </button>
+              }
             </form>
           </div>
         </div>

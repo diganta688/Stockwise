@@ -361,12 +361,7 @@ app.post(
 
 app.post("/signup/final", Signup);
 app.post("/login/final", Login);
-app.get("/dashboard/:id", protect, (req, res) => {
-  res.json({
-    message: "Welcome to your dashboard",
-    user: req.user,
-  });
-});
+app.get("/dashboard/:id", protect);
 app.post("/logout", logout);
 
 app.post("/user/find", async (req, res, next) => {
