@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Chart } from "./Chart";
 import { toast } from "react-toastify";
+import CircularProgress from "@mui/material/CircularProgress";
 import "react-toastify/dist/ReactToastify.css";
 
 function Summery({ watchlistUpdated }) {
@@ -11,7 +12,11 @@ function Summery({ watchlistUpdated }) {
   const [totalCurrValue, setTotalCurrValue] = useState(0);
   const [userr, setUserr] = useState({});
   const [allWishlist, setAllWishlist] = useState([]);
+  const [userLoading, setUserLoading] = useState(false);
+  const [holdingLoading, setHoldingLoading] = useState(false);
   useEffect(() => {
+    setUserLoading(true);
+    setHoldingLoading(true);
     const fetchData = async () => {
       try {
         const holdingsRes = await axios.get(
@@ -19,7 +24,7 @@ function Summery({ watchlistUpdated }) {
         );
         const holdings = holdingsRes.data.holdings;
         setAllHoldings(holdings);
-
+        setHoldingLoading(false);
         const currValue = holdings.reduce(
           (acc, stock) => acc + stock.currPrice * stock.qty,
           0
@@ -34,6 +39,7 @@ function Summery({ watchlistUpdated }) {
         );
         const { user } = userRes.data;
         setUserr(user);
+        setUserLoading(false);
       } catch (error) {
         toast.error(error, { position: "top-right", autoclose: 2000 });
       }
@@ -75,7 +81,7 @@ function Summery({ watchlistUpdated }) {
     <>
       <div className="row p-4">
         <div className="row">
-          <p className="fs-3 p-0 border-bottom pb-2">Hi,{userr.username}</p>
+          <p className="fs-3 p-0 border-bottom pb-2">Hi,{userLoading ? <CircularProgress size={40}/> : userr.username}</p>
         </div>
         <div className="row mt-5">
           <p className="fs-5 p-0 pb-5">Equity</p>
@@ -94,7 +100,7 @@ function Summery({ watchlistUpdated }) {
         <div className="row">
           <div className="col">
             <p style={{ fontSize: "50px" }} className="text-success">
-              {totalCurrValue.toFixed(2)}
+              {holdingLoading ? <h3>Loading...</h3> : totalCurrValue.toFixed(2)}
             </p>
           </div>
           <div className="col">

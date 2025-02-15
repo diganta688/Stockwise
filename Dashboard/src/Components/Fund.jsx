@@ -10,6 +10,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CircularProgress from "@mui/material/CircularProgress";
+
 const loadRazorpay = () => {
   return new Promise((resolve) => {
     if (window.Razorpay) {
@@ -25,6 +27,7 @@ const loadRazorpay = () => {
 };
 
 const Funds = () => {
+  const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState("");
   const [walletBalance, setWalletBalance] = useState(0);
   const [withdrawOpen, setWithdrawOpen] = useState(false);
@@ -58,7 +61,6 @@ const Funds = () => {
     indexOfLastTransaction
   );
   const totalPages = Math.ceil(transactions.length / transactionsPerPage);
-
 
   const handleWithdraw = async () => {
     if (
@@ -100,9 +102,7 @@ const Funds = () => {
         autoclose: 2000,
       });
     }
-
   };
-  
 
   useEffect(() => {
     fetchWalletBalance();
@@ -111,11 +111,14 @@ const Funds = () => {
 
   const fetchWalletBalance = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/wallet-balance/${id}`
       );
       setWalletBalance(response.data.balance);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       toast.error("Error fetching wallet balance:", {
         position: "top-right",
         autoclose: 2000,
@@ -215,8 +218,15 @@ const Funds = () => {
 
   return (
     <div className="container mt-4">
-           <div className="card">
-        <h3>Wallet Balance: ₹{walletBalance.toFixed(2)}</h3>
+      <div className="card">
+        <h3>
+          Wallet Balance:
+          {loading ? (
+            <CircularProgress size="20px" />
+          ) : (
+            `₹${(walletBalance || 0).toFixed(2)}`
+          )}
+        </h3>
       </div>
       <div className="d-flex justify-content-end mt-3">
         <p className="funds-add">Instant, zero fund transfers with UPI</p>
@@ -341,18 +351,19 @@ const Funds = () => {
                 <tr key={index}>
                   <td>{new Date(txn.date).toLocaleString()}</td>
                   <td
-                    style={{ 
-                      color: (txn.type === "deposit" || txn.type === "SELLStock") 
-                        ? "green" 
-                        : "red" 
+                    style={{
+                      color:
+                        txn.type === "deposit" || txn.type === "SELLStock"
+                          ? "green"
+                          : "red",
                     }}
                   >
                     {txn.type === "deposit"
                       ? "Deposit"
                       : txn.type === "withdraw"
                       ? "Withdraw"
-                      : txn.type === "BUY Stock" 
-                      ? "BUY Stock" 
+                      : txn.type === "BUY Stock"
+                      ? "BUY Stock"
                       : "SELL Stock"}
                   </td>
                   <td>₹{txn.amount}</td>
@@ -361,7 +372,7 @@ const Funds = () => {
             )}
           </tbody>
         </table>
-        
+
         {/* Pagination Controls */}
         <div className="d-flex justify-content-between align-items-center">
           <button

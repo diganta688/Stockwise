@@ -59,6 +59,7 @@ function Signup() {
       setErrorOtp(
         "Otp can be recive only few numbers. If you facing some issue then"
       );
+      setOtpSend(false)
     }
   };
   const mobileVerification = async () => {

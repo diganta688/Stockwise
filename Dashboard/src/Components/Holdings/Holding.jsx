@@ -13,9 +13,11 @@ const Holdings = () => {
   const [totalCurrValue, setTotalCurrValue] = useState(0);
   const [allHoldings, setAllHoldings] = useState([]);
   const [activeTab, setActiveTab] = useState("HoldingCount");
+  const [loading, setLoading] = useState(false);
 
   let get = async () => {
     try {
+      setLoading(true);
       await axios.get(`${import.meta.env.VITE_API_URL}/allHoldings/${id}`).then((res) => {
         let holdings = res.data.holdings;
         setAllHoldings(res.data.holdings);
@@ -30,7 +32,9 @@ const Holdings = () => {
         );
         setTotalCurrValue(currValue);
       });
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       toast.error(error,  { position: "top-right" , autoclose: 2000})
     }
   };
@@ -133,38 +137,39 @@ const Holdings = () => {
 
   return (
     <>
-      {allHoldings.length === 0 ? (
-        <div className="text-center order">
-          <MenuBookIcon fontSize="large" />
-          <p className="fs-5 text-muted p-3">
-            You haven’t Holding 
-          </p>
-        </div>
-      ) : (
-        <>
-          <button
-            className={
-              activeTab === "HoldingCount"
-                ? "active-tab holding-btn"
-                : "holding-btn"
-            }
-            onClick={() => setActiveTab("HoldingCount")}
-          >
-            Holdings ({allHoldings.length})
-          </button>
-          <button
-            className={
-              activeTab === "HoldingChart"
-                ? "active-tab holding-btn"
-                : "holding-btn"
-            }
-            onClick={() => setActiveTab("HoldingChart")}
-          >
-            Holdings Chart
-          </button>
-          {renderTabContent()}
-        </>
-      )}
+      {
+        loading? <h3>Loading...</h3> : allHoldings.length === 0 ? (
+          <div className="text-center order">
+            <MenuBookIcon fontSize="large" />
+            <p className="fs-5 text-muted p-3">
+              You haven’t Holding 
+            </p>
+          </div>
+        ) : (
+          <>
+            <button
+              className={
+                activeTab === "HoldingCount"
+                  ? "active-tab holding-btn"
+                  : "holding-btn"
+              }
+              onClick={() => setActiveTab("HoldingCount")}
+            >
+              Holdings ({allHoldings.length})
+            </button>
+            <button
+              className={
+                activeTab === "HoldingChart"
+                  ? "active-tab holding-btn"
+                  : "holding-btn"
+              }
+              onClick={() => setActiveTab("HoldingChart")}
+            >
+              Holdings Chart
+            </button>
+            {renderTabContent()}
+          </>
+        )}
     </>
   );
 };

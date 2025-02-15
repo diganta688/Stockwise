@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import axios from "axios";
-import { ToastContainer, toast, Flip } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "react-router-dom";
 
 function Order() {
   let { id } = useParams();
   const [allOrders, setallOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`${import.meta.env.VITE_API_URL}/allOrders/${id}`)
       .then((res) => {
@@ -33,9 +35,11 @@ function Order() {
             }
           });
           setallOrders(orders);
+          setLoading(false);
         }
       })
       .catch((error) => {
+        setLoading(false);
         toast.error(error, { position: "top-right" , autoclose: 2000});        
         
       });
@@ -43,8 +47,7 @@ function Order() {
 
   return (
     <>
-
-      {allOrders.length === 0 ? (
+      {loading?<h3>Loading...</h3>:allOrders.length === 0 ? (
         <div className="text-center order">
           <MenuBookIcon fontSize="large" />
           <p className="fs-5 text-muted p-3">
