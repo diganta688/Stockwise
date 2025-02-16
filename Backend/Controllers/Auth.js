@@ -23,10 +23,10 @@ module.exports.Signup = async (req, res) => {
     const token = generateToken(user._id);
     res.cookie('jwt', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
       maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'None'
-    });    
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === "production", 
+    });
     res.status(201).json({
       message: "User signed up successfully",
       success: true,
@@ -56,9 +56,9 @@ module.exports.Login = async (req, res) => {
     const token = generateToken(user._id);
     res.cookie('jwt', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
       maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'None'
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === "production", 
     });
     res.status(201).json({
       message: "User login up successfully",
@@ -84,23 +84,23 @@ exports.protect = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {      
-    res.cookie('jwt', token, {
+    res.clearCookie("jwt", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: new Date(0),
-      sameSite: 'None'
-    });    
+      expires: new Date(0),
+      sameSite: 'Strict',
+      secure: process.env.NODE_ENV === "production", 
+    });
     res.status(401).json({ status: false, error: 'Invalid token' });
   }
 };
 
 
 module.exports.logout = (req, res) => {
-  res.cookie('jwt', token, {
+  res.cookie('jwt', '', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: new Date(0),
-    sameSite: 'None'
-  }); 
+    expires: new Date(0),
+    sameSite: 'Strict',
+    secure: process.env.NODE_ENV === "production", 
+  });
   res.status(200).json({ success: true, message: 'Logged out successfully' });
 };
