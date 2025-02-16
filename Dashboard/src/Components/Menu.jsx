@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import { NavLink } from "react-router-dom";
 import Box from "@mui/material/Box";
@@ -15,6 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import CircularProgress from '@mui/material/CircularProgress';
 import WarningIcon from "@mui/icons-material/Warning";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 
 function Menuu() {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -23,6 +24,7 @@ function Menuu() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { uId } = useContext(uidContext);
   const [userr, setUserr] = useState({});
+  const [userAvater, setUserAvater] = useState();
 
   const toto = () => {
     toast.info("You don't have any notification", {
@@ -32,7 +34,27 @@ function Menuu() {
   };
   const handleOpenUserMenu = async (event) => {
     setAnchorElUser(event.currentTarget);
-    setUsernameLoading(true);
+  };
+
+  const logout = async () => {
+    try {
+      setLoading(true);
+      await axios.post(`${import.meta.env.VITE_API_URL}/logout`, {}, {
+        withCredentials: true
+      }); 
+      window.open(`${import.meta.env.VITE_API_URL_FRONTEND}/signup`, "_blank");
+      window.close();
+    } catch (e) {
+      setLoading(false);
+      toast.error(e.message, { position: "top-right", autoClose: 2000 });
+    }
+  };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const avaterFind = async()=>{
+    setUsernameLoading(true)
     try {
       let userRes = await axios.post(
         `${import.meta.env.VITE_API_URL}/user/find`,
@@ -43,6 +65,7 @@ function Menuu() {
       );
       const { user } = userRes.data;
       setUserr(user);
+      setUserAvater(user.name.charAt(0));
       setUsernameLoading(false)
     } catch (error) {
       setUsernameLoading(false)
@@ -51,32 +74,10 @@ function Menuu() {
         autoclose: 2000,
       });
     }
-  };
-
-  const logout = async () => {
-    try {
-      setLoading(true);
-      setAnchorElUser(null);
-      let res = await axios.post(`${import.meta.env.VITE_API_URL}/logout`, {
-        withCredentials: true,
-      });
-      if (res.data.success) {
-        window.location.href = `${
-          import.meta.env.VITE_API_URL_FRONTEND
-        }/signup`;
-        setLoading(false);
-      }
-      else{
-        setLoading(false);
-      }
-    } catch (e) {
-      setLoading(false);
-      toast.error(e.message, { position: "top-right", autoClose: 2000 });
-    }
-  };
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  }
+  useEffect(()=>{
+    avaterFind();
+  },[]);
   return (
     <>
       <div className="col-8 menu-main">
@@ -145,8 +146,7 @@ function Menuu() {
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
                       alt="Remy Sharp"
-                      src="\media\Images\meFounder.jpg"
-                    />
+                    >{userAvater}</Avatar>
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -175,13 +175,12 @@ function Menuu() {
                     >
                       <Avatar
                         alt="Remy Sharp"
-                        src="\media\Images\meFounder.jpg"
                         style={{
                           width: "30px",
                           height: "30px",
                           marginRight: "1rem",
                         }}
-                      />
+                      >{userAvater}</Avatar>
                       {usernameLoading ? <CircularProgress size="15px" /> : userr.username}
                     </Typography>
                   </MenuItem>

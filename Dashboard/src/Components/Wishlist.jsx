@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import WatchListItems from "./WatchListItems";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "react-router-dom";
+import { counterUpdate } from "../Content/context";
 
-function Wishlist({ watchlistUpdated, refreshWatchlist }) {
+function Wishlist() {
+  let value = useContext(counterUpdate);
   let { id } = useParams();
   const [allWishlist, setAllWishlist] = useState([]);
   const getData = async () => {
@@ -88,7 +90,7 @@ function Wishlist({ watchlistUpdated, refreshWatchlist }) {
 
   useEffect(() => {
     getData();
-  }, [watchlistUpdated]);
+  }, [value.watchlistUpdated]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -112,7 +114,7 @@ function Wishlist({ watchlistUpdated, refreshWatchlist }) {
           style={{ listStyle: "none", marginBottom: "5rem" }}
         >
           {allWishlist.map((stock, idx) => (
-            <WatchListItems stock={stock} key={idx} refreshWatchlist={refreshWatchlist} />
+            <WatchListItems stock={stock} key={idx} />
           ))}
         </ul>
       </div>

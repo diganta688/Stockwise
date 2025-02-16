@@ -3,7 +3,7 @@ import axios from "axios";
 import Dialog from "@mui/material/Dialog";
 import TextField from "@mui/material/TextField";
 import Slide from "@mui/material/Slide";
-import { counterContext } from "../Content/context";
+import { counterContext, counterUpdate } from "../Content/context";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useParams } from "react-router-dom";
@@ -14,6 +14,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 function BuySellDial({ isOpen, setIsopen, uid }) {
+  const value = useContext(counterUpdate);
   let { id } = useParams();
   const [btnDisabled, setBtnDesabled] = useState(false);
   const [stock, setStock] = useState({});
@@ -84,6 +85,7 @@ function BuySellDial({ isOpen, setIsopen, uid }) {
               amount: price,
             }
           );
+          value.setWatchlistUpdated(prev=>!prev);
         }, 4000);
       } else {
         setBalence("Don't have enough balance");

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Charts } from "./Charts";
 import HoldingCount from "./HoldingCount";
 import axios from "axios";
@@ -6,8 +6,10 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { counterUpdate } from "../../Content/context";
 
 const Holdings = () => {
+  const value = useContext(counterUpdate);
   let { id } = useParams();
   const [totalInvestment, setTotalInvestment] = useState(0);
   const [totalCurrValue, setTotalCurrValue] = useState(0);
@@ -82,8 +84,10 @@ const Holdings = () => {
   }
 
   useEffect(() => {
-    get();
-  }, []);
+    setTimeout(() => {
+      get();
+    }, 750);
+  }, [value.watchlistUpdated]);
 
   useEffect(() => {
       const interval = setInterval(() => {

@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Chart } from "./Chart";
 import { toast } from "react-toastify";
 import CircularProgress from "@mui/material/CircularProgress";
 import "react-toastify/dist/ReactToastify.css";
+import { counterUpdate } from "../../Content/context";
 
-function Summery({ watchlistUpdated }) {
+function Summery() {
+  const value = useContext(counterUpdate);
   let { id } = useParams();
   const [allHoldings, setAllHoldings] = useState([]);
   const [totalCurrValue, setTotalCurrValue] = useState(0);
@@ -50,7 +52,7 @@ function Summery({ watchlistUpdated }) {
         setAllWishlist(res.data.wishlists);
       });
     fetchData();
-  }, [id, watchlistUpdated]);
+  }, [id, value.watchlistUpdated]);
   const data = {
     labels: allWishlist.map((a) => a["name"]),
     datasets: [

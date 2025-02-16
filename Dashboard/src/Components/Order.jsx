@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "react-router-dom";
+import { counterUpdate } from "../Content/context";
 
 function Order() {
+  const value = useContext(counterUpdate);
   let { id } = useParams();
   const [allOrders, setallOrders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -43,7 +45,7 @@ function Order() {
         toast.error(error, { position: "top-right" , autoclose: 2000});        
         
       });
-  }, []);
+  }, [value.watchlistUpdated]);
 
   return (
     <>

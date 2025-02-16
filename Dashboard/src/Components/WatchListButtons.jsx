@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import StockAnalyse from "./StockAnalyse";
@@ -11,8 +11,10 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { counterUpdate } from "../Content/context";
 
-const WatchListButtons = ({ uid, refreshWatchlist, setIsMouseEnter}) => {
+const WatchListButtons = ({ uid, setIsMouseEnter}) => {
+  const value = useContext(counterUpdate);
   const [open, setOpen] = useState(false);
   const [AnalyseOpen, setAnalyseOpen] = useState(false);
   let { id } = useParams();
@@ -24,7 +26,7 @@ const WatchListButtons = ({ uid, refreshWatchlist, setIsMouseEnter}) => {
   }
   const deleteFromWishlist = async () => {
     toast.success("successfully removed", { position: "top-right", autoclose: 2000 });
-    refreshWatchlist();
+    value.setWatchlistUpdated(prev=>!prev);
     await axios.post(`${import.meta.env.VITE_API_URL}/delete-from-wishlist/${id}`, {
       data: uid._id,
     });

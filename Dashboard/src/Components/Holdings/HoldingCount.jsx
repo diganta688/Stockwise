@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import SellOutlinedIcon from "@mui/icons-material/SellOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
@@ -12,6 +12,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { counterUpdate } from "../../Content/context";
 
 function HoldingCount({ allHoldings, totalInvestment, totalCurrValue }) {
   let {id} = useParams();
@@ -19,6 +20,7 @@ function HoldingCount({ allHoldings, totalInvestment, totalCurrValue }) {
   const [selectedStock, setSelectedStock] = React.useState(null);
   const [sellQty, setSellQty] = React.useState(0);
   const [calculatedPrice, setCalculatedPrice] = React.useState(0);
+  const value = useContext(counterUpdate);
 
   const handleClose = () => {
     setOpen(false);
@@ -44,11 +46,12 @@ function HoldingCount({ allHoldings, totalInvestment, totalCurrValue }) {
    if(sellQty>0){
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/sell-stock`, {
-          stockId: selectedStock._id,
-          userId: id,
-          sellQty: sellQty,
-          price: calculatedPrice
+        stockId: selectedStock._id,
+        userId: id,
+        sellQty: sellQty,
+        price: calculatedPrice
       },{ withCredentials: true });
+      value.setWatchlistUpdated(prev=>!prev);
       toast.success(response.data.message,  { position: "top-right" , autoclose: 2000})
       handleClose();
     } catch (error) {

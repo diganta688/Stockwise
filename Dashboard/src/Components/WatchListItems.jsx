@@ -4,7 +4,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import WatchListButtons from "./WatchListButtons";
 import { counterContext } from "../Content/context";
 
-function WatchListItems({ stock, refreshWatchlist }) {  
+function WatchListItems({ stock }) {  
   const [isMouseEnter, setIsMouseEnter] = useState(false);
   const onMouseEnter = () => {
     setIsMouseEnter(true);
@@ -28,7 +28,6 @@ function WatchListItems({ stock, refreshWatchlist }) {
             {isMouseEnter && (
               <WatchListButtons
                 uid={stock}
-                refreshWatchlist={refreshWatchlist}
                 setIsMouseEnter={setIsMouseEnter}
               />
             )}

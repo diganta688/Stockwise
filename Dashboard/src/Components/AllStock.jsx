@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -11,8 +11,10 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useParams } from "react-router-dom";
 import { ToastContainer, toast, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { counterUpdate } from "../Content/context";
 
-function AllStock({ refreshWatchlist }) {
+function AllStock() {
+  const value = useContext(counterUpdate);
   const [isValue, setIsValue] = useState(false);
   const [isSearchValue, setIsSearchValue] = useState("");
   const [stockInfo, setStockInfo] = useState("");
@@ -72,7 +74,7 @@ function AllStock({ refreshWatchlist }) {
         }
       );
       if (response.status === 200) {
-        refreshWatchlist();
+        value.setWatchlistUpdated(prev=>!prev);
         toast.success("Stock added Successfully", {
           position: "top-right",
           autoclose: 2000,
