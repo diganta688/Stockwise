@@ -1,7 +1,12 @@
 require('dotenv').config();
 const {UserModel} = require('../model/User');
-const {generateToken, verifyToken} = require("../util/jwt")
+const jwt = require('jsonwebtoken');
 
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: '1d'
+  });
+};
 
 module.exports.Signup = async (req, res) => {
   try {
@@ -21,9 +26,11 @@ module.exports.Signup = async (req, res) => {
     const token = generateToken(user._id);
     res.cookie('jwt', token, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'strict'
+      secure: true,
+      sameSite: 'None',
+      maxAge: 24 * 60 * 60 * 1000
     });
+
     res.status(201).json({
       message: "User signed up successfully",
       success: true,
@@ -53,9 +60,11 @@ module.exports.Login = async (req, res) => {
     const token = generateToken(user._id);
     res.cookie('jwt', token, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'strict'
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Strict',
+      maxAge: 24 * 60 * 60 * 1000
     });
+
     res.status(201).json({
       message: "User login up successfully",
       success: true,
@@ -67,35 +76,28 @@ module.exports.Login = async (req, res) => {
 };
 
 exports.protect = async (req, res, next) => {
-  let {id} = req.params;
-
-  
+  const token = req.cookies.jwt;
+  if (!token) {
+    return res.status(401).json({ status: false, message: 'Not authorized' });
+  }
   try {
-    const token = req.cookies.jwt;
-    if (!token) return res.status(401).json({ status: false, error: 'Unauthorized' });
-    const decoded = verifyToken(token);
-    const user = await UserModel.findById(decoded.userId);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await UserModel.findById(decoded.id);
     if (!user) {
-      return res.status(401).json({ status: false, error: 'User no longer exists' });
+      return res.status(403).json({ status: false, message: 'Access denied' });
     }
-    req.user = user;
-    next();
-  } catch (error) {    
-    res.clearCookie("jwt", {
-      httpOnly: true,
-      expires: new Date(0),
-      sameSite: 'Strict'
-    });
-    res.status(401).json({ status: false, error: 'Invalid token' });
+    return res.status(201).json({status: true});
+    
+  } catch (error) {
+    return res.status(401).json({ status: false, message: 'Invalid token' });
   }
 };
 
-
 module.exports.logout = (req, res) => {
-  res.cookie('jwt', '', {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 1000),
     httpOnly: true,
-    expires: new Date(0), // Expire immediately
-    sameSite: 'Strict' // Ensure same-site policy is correct
+    secure: process.env.NODE_ENV === 'production'
   });
   res.status(200).json({ success: true, message: 'Logged out successfully' });
 };
