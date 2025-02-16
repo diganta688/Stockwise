@@ -13,16 +13,19 @@ function Home() {
   const [display, setDisplay] = useState(false);
   const fetchUserData = async () => {
     try {
-      let {data}= await axios.get(
+      const {data} = await axios.get(
         `${import.meta.env.VITE_API_URL}/dashboard/${id}`,
         { withCredentials: true }
       );
-    } catch (error) {
-      if (error.response?.status === 401) {
+      
+      if(data.status!==true){
         window.location.href = `${import.meta.env.VITE_API_URL_FRONTEND}/signup`;
       }
+    } catch (error) {
+      console.error("Session expired:", error);
     }
   };
+
   useEffect(() => {
     fetchUserData();
     setDisplay(true);
