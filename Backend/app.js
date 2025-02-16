@@ -44,19 +44,7 @@ app.use(
 app.options("*", cors());
 
 
-const sessionoption = {
-  secret: "secret key",
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    expires: Date.now() + 1 * 24 * 60 * 60 * 1000,
-    maxAge: 1 * 24 * 60 * 60 * 1000,
-    secure: false,
-    sameSite: "lax",
-  },
-};
 
-app.use(session(sessionoption));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
