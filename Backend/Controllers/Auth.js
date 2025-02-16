@@ -78,7 +78,6 @@ exports.protect = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({ status: false, error: 'User no longer exists' });
     }
-    await UserModel.findById(id);
     req.user = user;
     next();
   } catch (error) {    
