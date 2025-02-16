@@ -21,12 +21,7 @@ module.exports.Signup = async (req, res) => {
     }
     const user = await UserModel.create({ name, username, email, password, phoneNumber });
     const token = generateToken(user._id);
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'strict',
-      secure: process.env.NODE_ENV === "production", 
-    });
+    res.cookie('jwt', token);
     res.status(201).json({
       message: "User signed up successfully",
       success: true,
@@ -54,12 +49,7 @@ module.exports.Login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
     const token = generateToken(user._id);
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'strict',
-      secure: process.env.NODE_ENV === "production", 
-    });
+    res.cookie('jwt', token);
     res.status(201).json({
       message: "User login up successfully",
       success: true,
@@ -96,7 +86,7 @@ exports.protect = async (req, res, next) => {
 
 
 module.exports.logout = (req, res) => {
-  res.cookie('jwt', '', {
+  res.cookie('jwt', {
     httpOnly: true,
     expires: new Date(0),
     sameSite: 'Strict',
