@@ -17,9 +17,6 @@ function Home() {
         `${import.meta.env.VITE_API_URL}/dashboard/${id}`,
         { withCredentials: true }
       );
-      if(data.status===401){
-        window.location.href = `${import.meta.env.VITE_API_URL_FRONTEND}/signup`;
-      }
     } catch (error) {
       if (error.response?.status === 401) {
         window.location.href = `${import.meta.env.VITE_API_URL_FRONTEND}/signup`;
