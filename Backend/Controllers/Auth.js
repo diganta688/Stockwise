@@ -21,15 +21,19 @@ module.exports.Signup = async (req, res) => {
     }
     const user = await UserModel.create({ name, username, email, password, phoneNumber });
     const token = generateToken(user._id);
-    res.cookie('jwt', token);
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+      maxAge: 1 * 24 * 60 * 60 * 1000 
+    };
+    res.cookie('jwt', token, cookieOptions);
     res.status(201).json({
       message: "User signed up successfully",
       success: true,
       redirectTo: `${process.env.VITE_API_URL_DASHBOARD}/dashboard/${user._id}/summery`,
     });
-  } catch (error) {
-    console.log(error);
-    
+  } catch (error) {    
     res.status(500).json({ message: error.message });
   }
 };
@@ -49,9 +53,13 @@ module.exports.Login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
     const token = generateToken(user._id);
-    console.log(token);
-    
-    res.cookie('jwt', token);
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+      maxAge: 1 * 24 * 60 * 60 * 1000
+    };
+    res.cookie('jwt', token, cookieOptions);
     res.status(201).json({
       message: "User login up successfully",
       success: true,
@@ -63,26 +71,25 @@ module.exports.Login = async (req, res) => {
 };
 
 exports.protect = async (req, res, next) => {
-  let {id} = req.params;
+  const {id} = req.params;
   try {
     const token = req.cookies.jwt;
-    console.log(token);
-    
-    if (!token) return res.status(401).json({ status: false, error: 'Unauthorized' });
+    if (!token) {
+      return res.status(401).json({ status: false, error: 'Unauthorized' });
+    }
     const decoded = verifyToken(token);
     const user = await UserModel.findById(decoded.userId);
     if (!user) {
-      return res.status(401).json({ status: false, error: 'User no longer exists' });
+      return res.status(401).json({ status: false, error: 'User not found' });
     }
-    await UserModel.findById(id);
+    await UserModel.findById(id)
     req.user = user;
     next();
-  } catch (error) {      
+  } catch (error) {
     res.clearCookie("jwt", {
       httpOnly: true,
-      expires: new Date(0),
-      sameSite: 'Strict',
-      secure: process.env.NODE_ENV === "production", 
+      secure: true,
+      sameSite: 'none'
     });
     res.status(401).json({ status: false, error: 'Invalid token' });
   }
@@ -90,11 +97,11 @@ exports.protect = async (req, res, next) => {
 
 
 module.exports.logout = (req, res) => {
-  res.cookie('jwt', {
+  res.clearCookie('jwt', {
     httpOnly: true,
-    expires: new Date(0),
-    sameSite: 'Strict',
-    secure: process.env.NODE_ENV === "production", 
+    secure: process.env.NODE_ENV === "production",
+    sameSite: 'none',
+    path: '/'
   });
   res.status(200).json({ success: true, message: 'Logged out successfully' });
 };

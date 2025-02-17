@@ -50,9 +50,8 @@ function Login() {
         { ...formData },
         { withCredentials: true }
       );
-      const { success, message, token, redirectTo } = data;
+      const { success, message, redirectTo } = data;
       if (success) {
-        localStorage.setItem("authToken", token);
         setIsSubmitting(false);
         window.open(redirectTo, "_blank");
         navigate("/signup");
