@@ -49,6 +49,8 @@ module.exports.Login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
     const token = generateToken(user._id);
+    console.log(token);
+    
     res.cookie('jwt', token);
     res.status(201).json({
       message: "User login up successfully",
@@ -64,6 +66,8 @@ exports.protect = async (req, res, next) => {
   let {id} = req.params;
   try {
     const token = req.cookies.jwt;
+    console.log(token);
+    
     if (!token) return res.status(401).json({ status: false, error: 'Unauthorized' });
     const decoded = verifyToken(token);
     const user = await UserModel.findById(decoded.userId);
