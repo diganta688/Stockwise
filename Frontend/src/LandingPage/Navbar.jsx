@@ -10,7 +10,6 @@ function Navbar() {
             <img
               src="\media\Images\logo.svg"
               alt="Logo"
-              style={{ width: "20%" }}
             />
           </NavLink>
         </div>
@@ -25,8 +24,8 @@ function Navbar() {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse ml-5" id="navbarSupportedContent">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+        <div className="collapse navbar-collapse ml-5" id="navbarSupportedContent" style={{justifyContent: "flex-end"}}>
+          <ul className="navbar-nav mb-2 mb-lg-0">
             <li className="nav-item">
               <NavLink
                 className={(e) => (e.isActive ? "nav-link active text-primary" : "nav-link")}

@@ -12,7 +12,7 @@ function Hero() {
       </div>
       <div className="row pt-5">
         <div className="col-2"></div>
-        <div className="col-4">
+        <div className="col-4 about-text-left">
           <div className="row">
             <p>
               We kick-started operations on the 15th of August, 2010 with the
@@ -36,7 +36,7 @@ function Hero() {
             </p>
           </div>
         </div>
-        <div className="col-4">
+        <div className="col-4 about-text-right">
           <div className="row">
             <p>
               In addition, we run a number of popular open online educational

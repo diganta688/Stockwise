@@ -59,17 +59,15 @@ function Signup() {
       setErrorOtp(
         "Otp can be recive only few numbers. If you facing some issue then"
       );
-      setOtpSend(false)
+      setOtpSend(false);
     }
   };
   const mobileVerification = async () => {
-    setIsContinue(true);
+    setOtpSend(true); 
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/mobile-verification`,
-        {
-          phoneNumber: mobile,
-        }
+        { phoneNumber: mobile }
       );
       if (response.data.redirectTo) {
         navigate(response.data.redirectTo, {
@@ -80,17 +78,20 @@ function Signup() {
       }
     } catch (err) {
       setError("Error occurred while signing up. Please try again.");
+    } finally {
+      setOtpSend(false);
     }
   };
+
   return (
-    <div className="container p-5">
+    <div className="container ">
       <div className="row p-5">
-        <div className="col-8">
+        <div className="col-8 signup-col">
           <img
             src="media/Images/signup.png"
             alt="Signup Illustration"
             className="signup-image"
-            style={{ width: "95%" }}
+            style={{ width: "100%" }}
           />
         </div>
         <div className="col d-flex flex-column justify-content-center">
@@ -127,12 +128,16 @@ function Signup() {
               {errorOtp ? (
                 <p className="text-danger small">
                   {errorOtp}&nbsp;
-                  <a
-                    style={{ cursor: "pointer", color: "#0d6efd" }}
-                    onClick={mobileVerification}
-                  >
-                    Login Here
-                  </a>
+                  {otpSent ? (
+                    <span style={{ color: "#0d6efd" }}>Loading...</span> 
+                  ) : (
+                    <a
+                      style={{ cursor: "pointer", color: "#0d6efd" }}
+                      onClick={mobileVerification}
+                    >
+                      Login Here
+                    </a>
+                  )}
                 </p>
               ) : (
                 <p>You will receive an OTP on your number</p>

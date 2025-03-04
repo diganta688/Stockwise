@@ -6,13 +6,13 @@ function Hero() {
   const navigate = useNavigate();
 
   return (
-    <div className="container p-5">
+    <div className="container p-5 hero-container">
       <div className="row text-center home-hero">
         <img
           src="/media/Images/homeHero.png"
           alt="HomeHero image"
           className="mb-5"
-          style={{width: "80%"}}
+          style={{width: "100%"}}
         />
         <h1 className="fs-2">Invest in everything</h1>
         <p>
@@ -20,7 +20,7 @@ function Hero() {
           bonds, and more.
         </p>
         <button 
-          style={{ width: "17%", margin: "0 auto", background: "#387ed1" }}
+          style={{ margin: "0 auto", background: "#387ed1" }}
           className="fs-5"
           onClick={()=>  navigate("/signup")}
         >

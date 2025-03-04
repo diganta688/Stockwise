@@ -5,6 +5,7 @@ import Currency from "./priceDevide/Currency";
 
 function Brokerage() {
   const [activeTab, setActiveTab] = useState("Equity");
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "Equity":
@@ -19,70 +20,88 @@ function Brokerage() {
   };
 
   return (
-    <div className="container p-5">
-      <div className="row text-center p-5">
-        <div className="col mx-2">
-          <img src="media\Images\rup-0.svg" alt="" style={{ width: "78%" }} />
-          <h1 className="mb-5 " style={{ fontSize: "27px" }}>
-            Free equity delivery
-          </h1>
+    <div className="container-fluid p-4">
+      {/* Top Boxes Section */}
+      <div className="row text-center gy-4">
+        <div className="col-md-4 col-12">
+          <img
+            src="media/Images/rup-0.svg"
+            alt="Free Equity"
+            className="w-50"
+          />
+          <h1 className="fs-5 mt-3">Free equity delivery</h1>
           <p className="text-muted">
-            All equity delivery investments (NSE, BSE), are absolutely free — ₹
-            0 brokerage.
+            All equity delivery investments (NSE, BSE) are absolutely free — ₹0
+            brokerage.
           </p>
         </div>
-        <div className="col mx-2">
-          <img src="media\Images\rup-20.svg" alt="" style={{ width: "78%" }} />
-          <h1 className="mb-3 " style={{ fontSize: "27px" }}>
-            Intraday and F&O trades
-          </h1>
+        <div className="col-md-4 col-12">
+          <img
+            src="media/Images/rup-20.svg"
+            alt="Intraday Trades"
+            className="w-50"
+          />
+          <h1 className="fs-5 mt-3">Intraday and F&O trades</h1>
           <p className="text-muted">
-            Flat ₹ 20 or 0.03% (whichever is lower) per executed order on
-            intraday trades across equity, currency, and commodity trades. Flat
-            ₹20 on all option trades.
+            Flat ₹20 or 0.03% (whichever is lower) per executed order on
+            intraday trades across equity, currency, and commodity trades.
           </p>
         </div>
-        <div className="col mx-2">
-          <img src="media\Images\rup-0.svg" alt="" style={{ width: "78%" }} />
-          <h1 className="mb-5 " style={{ fontSize: "27px" }}>
-            Free direct MF
-          </h1>
+        <div className="col-md-4 col-12">
+          <img
+            src="media/Images/rup-0.svg"
+            alt="Free Mutual Funds"
+            className="w-50"
+          />
+          <h1 className="fs-5 mt-3">Free direct MF</h1>
           <p className="text-muted">
-            All direct mutual fund investments are absolutely free — ₹ 0
+            All direct mutual fund investments are absolutely free — ₹0
             commissions & DP charges.
           </p>
         </div>
       </div>
-      <div className="row p-5">
-        <div className="tabs">
+
+      {/* Tabs Section */}
+      <div className="row my-5">
+        <div className="d-flex justify-content-center gap-3">
           <button
-            className={activeTab === "Equity" ? "active-tab" : ""}
+            className={`btn ${
+              activeTab === "Equity" ? "btn-primary" : "btn-outline-primary"
+            }`}
             onClick={() => setActiveTab("Equity")}
           >
             Equity
           </button>
           <button
-            className={activeTab === "Currency" ? "active-tab" : ""}
+            className={`btn ${
+              activeTab === "Currency" ? "btn-primary" : "btn-outline-primary"
+            }`}
             onClick={() => setActiveTab("Currency")}
           >
             Currency
           </button>
           <button
-            className={activeTab === "Commodity" ? "active-tab" : ""}
+            className={`btn ${
+              activeTab === "Commodity" ? "btn-primary" : "btn-outline-primary"
+            }`}
             onClick={() => setActiveTab("Commodity")}
           >
             Commodity
           </button>
         </div>
-        <div className="content">{renderTabContent()}</div>
+        <div className="mt-4">{renderTabContent()}</div>
       </div>
-      <div className="row text-center pb-5">
-        <h4 style={{ fontWeight: "400", fontSize: "20px" }}>
-          <a href="">Calculate your costs upfront</a> using our brokerage
+
+      {/* Cost Calculator Section */}
+      <div className="row text-center mb-4">
+        <h4 className="fw-normal fs-6">
+          <a href="#">Calculate your costs upfront</a> using our brokerage
           calculator
         </h4>
       </div>
-      <div className="row pb-5">
+
+      {/* Charges Explained */}
+      <div className="row mb-4">
         <h3>Charges explained</h3>
       </div>
       <div className="row">
@@ -225,9 +244,9 @@ function Brokerage() {
           <div className="mt-5">
             <h6>DP (Depository participant) charges</h6>
             <p style={{ fontSize: "13px" }} className="m-4">
-              ₹15.34 per scrip (₹3.5 CDSL fee + ₹9.5 TradeSphere fee + ₹2.34 GST) is
-              charged on the trading account ledger when stocks are sold,
-              irrespective of quantity.
+              ₹15.34 per scrip (₹3.5 CDSL fee + ₹9.5 TradeSphere fee + ₹2.34
+              GST) is charged on the trading account ledger when stocks are
+              sold, irrespective of quantity.
             </p>
             <p style={{ fontSize: "13px" }} className="m-4">
               Female demat account holders (as first holder) will enjoy a
@@ -310,58 +329,67 @@ function Brokerage() {
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">
             Charges for account opening
           </h2>
-          <div className="overflow-x-auto" >
-            <table className="min-w-full divide-y divide-gray-200 border " >
+          {/* Responsive table container */}
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[600px] divide-y divide-gray-200 border">
               <thead>
                 <tr className="bg-gray-50">
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                  <th className="px-4 md:px-6 py-3 text-left text-xs md:text-sm font-semibold text-gray-900">
                     Type of account
                   </th>
-                  <th className="px-6 py-3 text-right text-sm font-semibold text-gray-900">
+                  <th className="px-4 md:px-6 py-3 text-right text-xs md:text-sm font-semibold text-gray-900">
                     Charges
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 <tr>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900">Online account</div>
+                  <td className="px-4 md:px-6 py-4">
+                    <div className="text-xs md:text-sm text-gray-900">
+                      Online account
+                    </div>
                   </td>
-                  <td className="px-6 py-4 text-right">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      <button className="btn btn-success">FREE</button>
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900">Offline account</div>
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      <button className="btn btn-success">FREE</button>
-                    </span>
+                  <td className="px-4 md:px-6 py-4 text-right">
+                    <button className="btn btn-success text-xs md:text-sm">
+                      FREE
+                    </button>
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900">
+                  <td className="px-4 md:px-6 py-4">
+                    <div className="text-xs md:text-sm text-gray-900">
+                      Offline account
+                    </div>
+                  </td>
+                  <td className="px-4 md:px-6 py-4 text-right">
+                    <button className="btn btn-success text-xs md:text-sm">
+                      FREE
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 md:px-6 py-4">
+                    <div className="text-xs md:text-sm text-gray-900">
                       NRI account (offline only)
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="text-sm text-gray-900">₹ 500</div>
+                  <td className="px-4 md:px-6 py-4 text-right">
+                    <div className="text-xs md:text-sm text-gray-900">
+                      ₹ 500
+                    </div>
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900">
+                  <td className="px-4 md:px-6 py-4">
+                    <div className="text-xs md:text-sm text-gray-900">
                       Partnership, LLP, HUF, or Corporate accounts (offline
                       only)
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="text-sm text-gray-900">₹ 500</div>
+                  <td className="px-4 md:px-6 py-4 text-right">
+                    <div className="text-xs md:text-sm text-gray-900">
+                      ₹ 500
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -369,6 +397,7 @@ function Brokerage() {
           </div>
         </div>
       </div>
+
       <div className="row p-5">
         <div className="mb-12">
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">

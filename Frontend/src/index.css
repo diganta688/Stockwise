@@ -19,20 +19,20 @@ body {
 
 #root {
   width: 100%;
-  margin: 0 auto; /* Ensures proper centering */
+  margin: 0 auto;
 }
 
 body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-x: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   min-width: 320px;
   min-height: 100vh;
-  box-sizing: border-box; /* Include padding and border in dimensions */
+  box-sizing: border-box;
 }
 
 a {
@@ -106,6 +106,16 @@ button:focus-visible {
   backdrop-filter: blur(5px);
 }
 
+.logo{
+  width:10%
+}
+
+.logo img{
+  width: 100%;
+}
+
+
+
 .nav-link {
   margin-right: 25px;
   font-weight: 450;
@@ -158,7 +168,6 @@ button:focus-visible {
 }
 
 .footer-info {
-  width: 1144px;
   line-height: 1.8;
   font-size: .68rem;
   color: #00000081;
@@ -206,7 +215,6 @@ button:focus-visible {
 }
 
 .product-hero{
-  /* padding-bottom: 5rem; */
   font-size: 3rem;
   line-height: 1.5;
   font-weight: 600;
@@ -301,4 +309,51 @@ table th, table td {
 
 .MuiSvgIcon-root{
   margin-bottom: 8px;
+}
+.product-hero-sub a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+@media (max-width: 768px) {
+  .product-hero {
+    font-size: 1.5rem;
+  }
+  .product-hero-sub {
+    font-size: 1rem;
+  }
+}
+
+
+@media (max-width: 991px) {
+  .logo{
+    width: 20%;
+  }
+}
+
+@media (max-width: 768px) {
+  .award,
+  .award-text,
+  .stats-text,
+  .stats-img,
+  .pricing-text,
+  .pricing-img,
+  .education-image,
+  .education-text,
+  .signup-col,
+  .about-text-left,
+  .about-text-right,
+  .imageFounder,
+  .founter-text {
+    width: 100% !important;
+  }
+
+  .pricing-container .pricing-row,
+  .state-row,
+  .awards-row,
+  .education-container,
+  .education-row {
+    padding: 0 48px !important;
+  }
 }
