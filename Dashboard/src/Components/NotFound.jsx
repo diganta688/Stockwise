@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -21,7 +21,7 @@ function NotFound() {
           setError({ status: 500, data: "An unexpected error occurred" });
         }
       });
-  }, []); 
+  }, []);
 
   return (
     <div className="container p-5 mb-5">
@@ -31,14 +31,19 @@ function NotFound() {
             {error.status === 404 ? (
               <>
                 <h1 className="fs-2">{error.status} Page Not Found</h1>
-                <p>{typeof error.data === 'object' ? error.data.error : error.data} 
+                <p>
+                  {typeof error.data === "object"
+                    ? error.data.error
+                    : error.data}
                   <Link to="/"> Zerodha’s home page</Link>
                 </p>
               </>
             ) : (
               <>
                 <h1 className="fs-2">500 An unexpected error occurred.</h1>
-                <p><Link to="/">Zerodha’s home page</Link></p>
+                <p>
+                  <Link to="/">Zerodha’s home page</Link>
+                </p>
               </>
             )}
           </div>

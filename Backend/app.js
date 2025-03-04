@@ -15,7 +15,7 @@ const { OrderModel } = require("./model/Orders");
 const { WishlistModel } = require("./model/Wishlist");
 const { UserModel } = require("./model/User");
 const OrderPayment = require("./model/OrderPayment");
-const Wallet = require ("./model/Wallet");
+const Wallet = require("./model/Wallet");
 const Transaction = require("./model/Transaction");
 const expresserr = require("./extra/expressErr");
 const wrapasync = require("./extra/wrapasync");
@@ -37,12 +37,11 @@ app.use(
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true
+    credentials: true,
   })
 );
 
 app.options("*", cors());
-
 
 const sessionoption = {
   secret: "secret key",
@@ -51,8 +50,8 @@ const sessionoption = {
   cookie: {
     expires: Date.now() + 1 * 24 * 60 * 60 * 1000,
     maxAge: 1 * 24 * 60 * 60 * 1000,
-    secure: false,
-    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "none",
   },
 };
 
@@ -71,7 +70,9 @@ app.post(
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      const existingItem = user.wishlists.find(item => item.name === data.name);
+      const existingItem = user.wishlists.find(
+        (item) => item.name === data.name
+      );
       if (existingItem) {
         return res
           .status(400)
@@ -185,9 +186,6 @@ app.post(
   })
 );
 
-
-
-
 app.post(
   "/update-holding",
   wrapasync(async (req, res) => {
@@ -257,12 +255,13 @@ app.post(
 app.post(
   "/addOrder/:id/:uid",
   wrapasync(async (req, res, next) => {
-    try {      
+    try {
       const { id, uid } = req.params;
       const user = await UserModel.findById(id);
       if (!user) return res.status(404).json({ message: "User not found" });
       const wishlist = await WishlistModel.findById(uid);
-      if (!wishlist) return res.status(404).json({ message: "Stock not found" });
+      if (!wishlist)
+        return res.status(404).json({ message: "Stock not found" });
       const addOrder = await OrderModel.create({
         user: id,
         name: wishlist.name,
@@ -288,12 +287,14 @@ app.post(
       res
         .status(201)
         .json({ success: true, message: "Order added successfully" });
-      } catch (error) {
-        console.error("Order error:", error);
-        res.status(500).json({ message: "Order creation failed", error: error.message });
-      }
-    })
-  );
+    } catch (error) {
+      console.error("Order error:", error);
+      res
+        .status(500)
+        .json({ message: "Order creation failed", error: error.message });
+    }
+  })
+);
 
 app.delete(
   "/delete-order/:orderid/:id",
@@ -361,7 +362,9 @@ app.post(
 
 app.post("/signup/final", Signup);
 app.post("/login/final", Login);
-app.get("/dashboard/:id", protect);
+app.get("/dashboard/:id", protect, (req, res) => {
+  res.status(200).json({ message: "Protected route accessed" });
+});
 app.post("/logout", logout);
 
 app.post("/user/find", async (req, res, next) => {
@@ -446,10 +449,12 @@ app.post("/create-order", async (req, res) => {
 app.post("/verify-payment/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
     const secret = process.env.RAZOR_PAY_SECRET;
     const body = `${razorpay_order_id}|${razorpay_payment_id}`;
-    const expectedSignature = crypto.createHmac("sha256", secret)
+    const expectedSignature = crypto
+      .createHmac("sha256", secret)
       .update(body)
       .digest("hex");
 
@@ -509,8 +514,6 @@ app.get("/transaction-history/:id", async (req, res) => {
   }
 });
 
-
-
 app.post("/withdraw-funds/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -544,18 +547,16 @@ app.post("/withdraw-funds/:id", async (req, res) => {
   }
 });
 
-
-
 app.post("/buy-stock-balence/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { amount } = req.body;    
+    const { amount } = req.body;
     if (!amount || amount <= 0) {
       return res.status(400).json({ error: "Invalid amount" });
     }
     const wallet = await Wallet.findOne({ userId: id });
     if (!wallet || wallet.balance < amount) {
-      console.error(error); 
+      console.error(error);
       return res.status(400).json({ error: "Insufficient funds" });
     }
     wallet.balance -= amount;
@@ -573,26 +574,26 @@ app.post("/buy-stock-balence/:id", async (req, res) => {
   }
 });
 
-app.post('/sell-stock', async (req, res) => {
+app.post("/sell-stock", async (req, res) => {
   try {
     const { stockId, userId, sellQty, price } = req.body;
     if (!stockId || !userId || !sellQty || !price) {
       return res.status(400).json({
         success: false,
-        message: 'Missing required fields: stockId, userId, sellQty, price'
+        message: "Missing required fields: stockId, userId, sellQty, price",
       });
     }
     const stock = await HoldingModel.findById(stockId);
     if (!stock) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Stock holding not found' 
+      return res.status(404).json({
+        success: false,
+        message: "Stock holding not found",
       });
     }
     if (sellQty <= 0 || sellQty > stock.qty) {
       return res.status(400).json({
         success: false,
-        message: `Invalid quantity. Available: ${stock.qty}`
+        message: `Invalid quantity. Available: ${stock.qty}`,
       });
     }
     let wallet = await Wallet.findOne({ userId });
@@ -601,11 +602,13 @@ app.post('/sell-stock', async (req, res) => {
     }
     if (sellQty === stock.qty) {
       await HoldingModel.findByIdAndDelete(stockId);
-      await UserModel.findByIdAndUpdate(userId, { $pull: { holdings: stockId } });
+      await UserModel.findByIdAndUpdate(userId, {
+        $pull: { holdings: stockId },
+      });
     } else {
-      await HoldingModel.findByIdAndUpdate(stockId, { 
+      await HoldingModel.findByIdAndUpdate(stockId, {
         $inc: { qty: -sellQty },
-        $set: { priceBuy: stock.priceBuy - price }
+        $set: { priceBuy: stock.priceBuy - price },
       });
     }
     wallet.balance += price;
@@ -619,21 +622,21 @@ app.post('/sell-stock', async (req, res) => {
     res.status(200).json({
       success: true,
       message: `Sold ${sellQty} shares of ${stock.name}`,
-      newBalance: wallet.balance
+      newBalance: wallet.balance,
     });
   } catch (error) {
-    console.error('Sell error:', error);
+    console.error("Sell error:", error);
     res.status(500).json({
       success: false,
-      message: 'Transaction failed',
-      error: error.message
+      message: "Transaction failed",
+      error: error.message,
     });
   }
 });
 
-app.get("/", (req, res)=>{
+app.get("/", (req, res) => {
   res.send("hello");
-})
+});
 app.all("*", (req, res, next) => {
   next(new expresserr(404, "We couldn’t find the page you were looking for."));
 });

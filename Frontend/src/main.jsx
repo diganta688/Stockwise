@@ -13,40 +13,40 @@ import ScrollToTop from "./LandingPage/ScrollToTop";
 import Login from "./LandingPage/Signup/Login";
 import SignupUser from "./LandingPage/Signup/SignupUser";
 import SignupOtp from "./LandingPage/Signup/SignupOtp";
-import { ToastContainer, toast, Flip } from "react-toastify";
+import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-  <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        limit={5}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-        transition={Flip}
-      />
+    <ToastContainer
+      position="top-right"
+      autoClose={2000}
+      limit={5}
+      hideProgressBar
+      newestOnTop={false}
+      closeOnClick={false}
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="dark"
+      transition={Flip}
+    />
     <ScrollToTop />
     <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/price" element={<PricingPage />} />
-        <Route path="/product" element={<ProductPage />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Signup/user-details" element={<SignupUser />} />
-        <Route path="/support" element={<SuppportPage />} />
-        <Route path="/otp-verification" element={<SignupOtp />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <Footer />
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/price" element={<PricingPage />} />
+      <Route path="/product" element={<ProductPage />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/Login" element={<Login />} />
+      <Route path="/Signup/user-details" element={<SignupUser />} />
+      <Route path="/support" element={<SuppportPage />} />
+      <Route path="/otp-verification" element={<SignupOtp />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+    <Footer />
   </BrowserRouter>
 );

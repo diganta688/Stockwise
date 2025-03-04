@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import Alert from '@mui/material/Alert';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import Alert from "@mui/material/Alert";
 import TopBar from "./TopBar";
 import Dashboard from "./Dashboard";
 import { uidContext } from "../Content/context";
@@ -13,13 +13,20 @@ function Home() {
   const [display, setDisplay] = useState(false);
   const fetchUserData = async () => {
     try {
-      let {data}= await axios.get(
+      const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/dashboard/${id}`,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+        }
       );
+      if (response.status !== 200) {
+        throw new Error("Failed to fetch user data");
+      }
     } catch (error) {
       if (error.response?.status === 401) {
-        window.location.href = `${import.meta.env.VITE_API_URL_FRONTEND}/signup`;
+        window.location.href = `${
+          import.meta.env.VITE_API_URL_FRONTEND
+        }/signup`;
       }
     }
   };
@@ -30,9 +37,13 @@ function Home() {
 
   return (
     <uidContext.Provider value={{ uId: id }}>
-      {display && <Alert severity="warning" >
-      Here, you can analyze a stock. Buying and selling are dynamic as of now. All transactions—buying and selling—should function like real ones. However, the money you are using is not real.
-      </Alert>}
+      {display && (
+        <Alert severity="warning">
+          Here, you can analyze a stock. Buying and selling are dynamic as of
+          now. All transactions—buying and selling—should function like real
+          ones. However, the money you are using is not real.
+        </Alert>
+      )}
       <div className="container-fluid p-0">
         <ToastContainer
           position="top-right"
