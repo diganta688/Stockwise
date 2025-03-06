@@ -19,7 +19,7 @@ body {
 
 #root {
   width: 100%;
-  margin: 0 auto;
+   : 0 auto;
 }
 
 body {
@@ -309,59 +309,4 @@ table th, table td {
 
 .MuiSvgIcon-root{
   margin-bottom: 8px;
-}
-.product-hero-sub a {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-@media (max-width: 768px) {
-  .product-hero {
-    font-size: 1.5rem;
-  }
-  .product-hero-sub {
-    font-size: 1rem;
-  }
-}
-
-
-@media (max-width: 991px) {
-  .logo{
-    width: 20%;
-  }
-}
-
-@media (max-width: 768px) {
-  .award,
-  .award-text,
-  .stats-text,
-  .stats-img,
-  .pricing-text,
-  .pricing-img,
-  .education-image,
-  .education-text,
-  .signup-col,
-  .about-text-left,
-  .about-text-right,
-  .imageFounder,
-  .founter-text {
-    width: 100% !important;
-  }
-
-  .pricing-container .pricing-row,
-  .state-row,
-  .awards-row,
-  .education-container,
-  .stateinfoimg{
-    width: 100% !important;
-  }
-}
-
-
-@media(max-width: 577px){
-  .container{
-    padding: 1rem !important;
-  }
-
 }
