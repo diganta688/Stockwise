@@ -81,82 +81,113 @@ function Login() {
   
   return (
     <>
-      <div className="container p-5">
-        <div className="row">
-          <h2 style={{ padding: "50px 100px" }}>Hey, +91{phoneNumber}</h2>
-        </div>
-        <div className="row" style={{ justifyContent: "center" }}>
-          <div className="col-5 ">
-            <form
-              method="post"
-              style={{ width: "100%" }}
-              onSubmit={handleSubmit}
-            >
-              <div className="row mb-4">
-                <TextField
-                  id="outlined-basic"
-                  label="UserName"
-                  name="username"
-                  variant="outlined"
-                  onChange={handleChange}
-                  value={formData.username}
-                />
-              </div>
-              <div className="row mb-4">
-                <TextField
-                  id="password"
-                  label="Password"
-                  name="password"
-                  variant="outlined"
-                  onChange={handleChange}
-                  value={formData.password}
-                  type={showPassword ? "text" : "password"}
-                  fullWidth
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={handleTogglePassword} edge="end">
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </div>
-              <div className="row mb-4">
-                <TextField
-                  id="outlined-read-only-input"
-                  label="Phone"
-                  value={"+91" + phoneNumber}
-                  readOnly
-                  name="phone"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="row">
-                {isSubmitting ? (
-                  <Button
-                    type="submit"
-                    disabled={!isFormValid()}
-                    variant="contained"
-                  >
-                    Loading...
-                  </Button>
-                ) : (
-                  <Button
-                    type="submit"
-                    disabled={!isFormValid()}
-                    variant="contained"
-                  >
-                    Login
-                  </Button>
-                )}
-              </div>
-            </form>
+  <div className="container p-3 p-md-5">
+    <div className="row">
+      <h2 className="text-center mb-4" style={{ padding: "20px 0" }}>
+        Hey, +91{phoneNumber}
+      </h2>
+    </div>
+    <div className="row justify-content-center">
+      <div className="col-12 col-md-8 col-lg-5">
+        <form
+          method="post"
+          style={{ width: "100%", maxWidth: "100%" }}
+          onSubmit={handleSubmit}
+        >
+          <div className="row mb-3">
+            <TextField
+              id="outlined-basic"
+              label="UserName"
+              name="username"
+              variant="outlined"
+              onChange={handleChange}
+              value={formData.username}
+              fullWidth
+            />
           </div>
-        </div>
+          <div className="row mb-3">
+            <TextField
+              id="password"
+              label="Password"
+              name="password"
+              variant="outlined"
+              onChange={handleChange}
+              value={formData.password}
+              type={showPassword ? "text" : "password"}
+              fullWidth
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleTogglePassword} edge="end">
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </div>
+          <div className="row mb-3">
+            <TextField
+              id="outlined-read-only-input"
+              label="Phone"
+              value={"+91" + phoneNumber}
+              readOnly
+              name="phone"
+              fullWidth
+            />
+          </div>
+          <div className="row">
+            {isSubmitting ? (
+              <Button
+                type="submit"
+                disabled={!isFormValid()}
+                variant="contained"
+                fullWidth
+              >
+                Loading...
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                disabled={!isFormValid()}
+                variant="contained"
+                fullWidth
+              >
+                Login
+              </Button>
+            )}
+          </div>
+        </form>
       </div>
-    </>
+    </div>
+  </div>
+  <style jsx="true">{`
+    @media (max-width: 576px) {
+      h2 {
+        font-size: 1.25rem;
+        padding: 10px 0;
+      }
+      .container {
+        padding: 10px;
+      }
+    }
+
+    @media (min-width: 577px) and (max-width: 768px) {
+      h2 {
+        font-size: 1.5rem;
+        padding: 15px 0;
+      }
+    }
+
+    @media (min-width: 769px) {
+      h2 {
+        font-size: 2rem;
+        padding: 50px 100px;
+      }
+    }
+  `}</style>
+</>
+
   );
 }
 

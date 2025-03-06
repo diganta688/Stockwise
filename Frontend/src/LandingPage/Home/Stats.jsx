@@ -5,8 +5,8 @@ import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 function Stats() {
   return (
     <div className="container p-3">
-      <div className="row p-5">
-        <div className="col-5 mr-5 p-5">
+      <div className="row p-5 state-row">
+        <div className="col-5 mr-5 p-5 stats-text">
           <h1 className="mb-5" style={{ fontSize: "2rem" }}>
             Trust with confidence
           </h1>
@@ -42,12 +42,12 @@ function Stats() {
             </p>
           </div>
         </div>
-        <div className="col-7 p-5">
+        <div className="col-7 p-5 stats-img">
           <img
             className=""
             src="media\Images\ecosystem.png"
             alt="ecosystem"
-            style={{ width: "89%" }}
+            style={{ width: "100%" }}
           />
           <div
             className=" rowexploreLinks text-center"
@@ -65,6 +65,7 @@ function Stats() {
         </div>
         <div className="text-center">
           <img
+          className="stateinfoimg"
             src="media\Images\pressLogos.png"
             alt="pressLogos"
             style={{ width: "65%" }}

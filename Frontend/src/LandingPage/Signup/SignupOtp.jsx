@@ -74,77 +74,65 @@ export default function SignupOtp() {
   };
 
   return (
-    <>
-      <div className="container">
-        <div className="row" style={{ justifyContent: "center" }}>
-          <div className="col-4">
-            <form onSubmit={handleSubmit}>
-              <p>
+    <div className="d-flex justify-content-center align-items-center bg-light ">
+    <div className="card shadow-sm p-4 m-5" style={{ width: "100%", maxWidth: "400px", borderRadius: "12px" }}>
+        <form onSubmit={handleSubmit}>
+            <p className="text-center mb-4">
                 An OTP has been sent to <b>+91{phone}</b>
-              </p>
-              <TextField
+            </p>
+            <TextField
                 id="outlined-number"
                 label="Enter OTP"
                 type="text"
                 value={otp}
                 onChange={handleOtp}
+                fullWidth
                 inputProps={{
-                  maxLength: 6,
-                  inputMode: "numeric",
-                  pattern: "[0-9]*",
+                    maxLength: 6,
+                    inputMode: "numeric",
+                    pattern: "[0-9]*",
                 }}
-                slotProps={{
-                  inputLabel: {
-                    shrink: true,
-                  },
-                }}
-              />
-              <p style={{ fontSize: "12px" }}>
+                margin="normal"
+            />
+            <p className="text-center small mb-2">
                 Didn't receive the OTP?{" "}
                 <a
-                  onClick={sendOtp}
-                  style={{ cursor: "pointer", color: "#0d6efd" }}
+                    onClick={sendOtp}
+                    style={{ cursor: "pointer", color: "#0d6efd", textDecoration: "underline" }}
                 >
-                  Click here
+                    Click here
                 </a>{" "}
                 to resend it.
-              </p>
-              {resendSuccess && (
-                <div>
-                  <p className="text-success small">{resendSuccess}</p>
-                </div>
-              )}
-              {error && (
-                <div>
-                  <p className="text-danger small">{error}</p>
-                </div>
-              )}
-              {
-                otpSent ? <button
-                type="submit"
-                style={{
-                  width: "80%",
-                  justifySelf: "center",
-                  marginBottom: "20px",
-                }}
-                disabled
-              >
-                loading...
-              </button> : <button
-                type="submit"
-                style={{
-                  width: "80%",
-                  justifySelf: "center",
-                  marginBottom: "20px",
-                }}
-              >
-                Submit
-              </button>
-              }
-            </form>
-          </div>
-        </div>
-      </div>
-    </>
+            </p>
+
+            {resendSuccess && (
+                <p className="text-success text-center small">{resendSuccess}</p>
+            )}
+            {error && (
+                <p className="text-danger text-center small">{error}</p>
+            )}
+            <div className="d-flex justify-content-center mt-3">
+                {otpSent ? (
+                    <button
+                        type="submit"
+                        className="btn bg-black w-100"
+                        disabled
+                        style={{color: "white"}}
+                    >
+                        Loading...
+                    </button>
+                ) : (
+                    <button
+                        type="submit"
+                        className="btn bg-black w-100"
+                        style={{color: "white"}}
+                    >
+                        Submit
+                    </button>
+                )}
+            </div>
+        </form>
+    </div>
+</div>
   );
 }

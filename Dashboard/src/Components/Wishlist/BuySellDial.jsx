@@ -3,7 +3,7 @@ import axios from "axios";
 import Dialog from "@mui/material/Dialog";
 import TextField from "@mui/material/TextField";
 import Slide from "@mui/material/Slide";
-import { counterContext, counterUpdate } from "../Content/context";
+import { counterContext, counterUpdate } from "../../Content/context";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useParams } from "react-router-dom";

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import Wishlist from "./Wishlist";
+import Wishlist from "./Wishlist/Wishlist";
 import Summery from "./Summery/Summery";
 import Order from "./Order";
 import Holdings from "./Holdings/Holding";
 import Fund from "./Fund";
 import AllStock from "./AllStock";
 import {counterUpdate} from "../Content/context"
+import WishlistsCeperated from "./Wishlist/WishlistsCeperated"
 
 function Dashboard() {
   const [watchlistUpdated, setWatchlistUpdated] = useState(false);
@@ -24,6 +25,7 @@ function Dashboard() {
             <Route path="holdings" element={<Holdings />} />
             <Route path="funds" element={<Fund />} />
             <Route path="allStock" element={<AllStock/>} />
+            <Route path="Wishlists" element={<WishlistsCeperated/>} />
           </Routes>
         </div>
       </div>

@@ -13,9 +13,10 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { counterUpdate } from "../../Content/context";
+import "./HoldingCount.css";  // Keep your CSS for other styling
 
 function HoldingCount({ allHoldings, totalInvestment, totalCurrValue }) {
-  let {id} = useParams();
+  let { id } = useParams();
   const [open, setOpen] = React.useState(false);
   const [selectedStock, setSelectedStock] = React.useState(null);
   const [sellQty, setSellQty] = React.useState(0);
@@ -43,27 +44,32 @@ function HoldingCount({ allHoldings, totalInvestment, totalCurrValue }) {
   };
 
   const sell = async () => {
-   if(sellQty>0){
-    try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/sell-stock`, {
-        stockId: selectedStock._id,
-        userId: id,
-        sellQty: sellQty,
-        price: calculatedPrice
-      },{ withCredentials: true });
-      value.setWatchlistUpdated(prev=>!prev);
-      toast.success(response.data.message,  { position: "top-right" , autoclose: 2000})
-      handleClose();
-    } catch (error) {
-      toast.error("Sell failed",  { position: "top-right" , autoclose: 2000})
-  }
-   }
-};
+    if (sellQty > 0) {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/sell-stock`,
+          {
+            stockId: selectedStock._id,
+            userId: id,
+            sellQty: sellQty,
+            price: calculatedPrice,
+          },
+          { withCredentials: true }
+        );
+        value.setWatchlistUpdated((prev) => !prev);
+        toast.success(response.data.message, { position: "top-right", autoClose: 2000 });
+        handleClose();
+      } catch (error) {
+        toast.error("Sell failed", { position: "top-right", autoClose: 2000 });
+      }
+    }
+  };
 
   return (
-    <>
-      <div className="order-table">
-        <table>
+    <div className="order-table-wrapper">
+      {/* Scrollable table container */}
+      <div className="order-table-scroll">
+        <table className="order-table">
           <thead>
             <tr>
               <th>Instrument</th>
@@ -75,55 +81,54 @@ function HoldingCount({ allHoldings, totalInvestment, totalCurrValue }) {
             </tr>
           </thead>
           <tbody>
-            {allHoldings.map((stock, idx) => {
-              return (
-                <tr key={idx} className="text-muted">
-                  <td>{stock.name}</td>
-                  <td>{stock.qty}</td>
-                  <td>{stock.priceBuy.toFixed(2)}</td>
-                  <td>{(stock.currPrice * stock.qty).toFixed(2)}</td>
-                  <td className={stock.net < 0 ? "loss" : "profit"}>
-                    {stock.net.toFixed(2)}%{" "}
-                  </td>
-                  <td>
-                    <Tooltip
-                      title={"Sell " + stock.name}
-                      arrow
-                      placement="top"
-                      TransitionComponent={Grow}
+            {allHoldings.map((stock, idx) => (
+              <tr key={idx} className="text-muted">
+                <td>{stock.name}</td>
+                <td>{stock.qty}</td>
+                <td>{stock.priceBuy.toFixed(2)}</td>
+                <td>{(stock.currPrice * stock.qty).toFixed(2)}</td>
+                <td className={stock.net < 0 ? "loss" : "profit"}>
+                  {stock.net.toFixed(2)}%
+                </td>
+                <td>
+                  <Tooltip
+                    title={"Sell " + stock.name}
+                    arrow
+                    placement="top"
+                    TransitionComponent={Grow}
+                  >
+                    <Button
+                      size="small"
+                      className="btn btn-WachList btn-danger"
+                      onClick={() => handleSellClick(stock)}
                     >
-                      <Button
-                        size="small"
-                        className="btn btn-WachList btn-danger"
-                        onClick={() => handleSellClick(stock)}
-                      >
-                        <SellOutlinedIcon />
-                      </Button>
-                    </Tooltip>
-                  </td>
-                </tr>
-              );
-            })}
+                      <SellOutlinedIcon />
+                    </Button>
+                  </Tooltip>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
-      <div
-        className="row px-5"
-        style={{ display: "flex", height: "12%", marginBottom: "1rem" }}
-      >
-        <div className="col">
+
+      {/* Summary Section (Fixed) */}
+      <div className="investment-summary">
+        <div className="summary-item">
           <h5>{totalInvestment.toFixed(2)}</h5>
           <p>Total investment</p>
         </div>
-        <div className="col">
+        <div className="summary-item">
           <h5>{totalCurrValue.toFixed(2)}</h5>
           <p>Current value</p>
         </div>
-        <div className="col">
+        <div className="summary-item">
           <h5>{(totalCurrValue - totalInvestment).toFixed(2)}</h5>
           <p>P&L</p>
         </div>
       </div>
+
+      {/* Sell Dialog */}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -150,11 +155,9 @@ function HoldingCount({ allHoldings, totalInvestment, totalCurrValue }) {
                   }}
                 />
                 <div style={{ marginTop: "1rem" }}>
-                  <strong>Estimated Value:</strong>₹{calculatedPrice.toFixed(2)}
+                  <strong>Estimated Value:</strong> ₹{calculatedPrice.toFixed(2)}
                   <br />
-                  <small>
-                    (Current Price: ₹{selectedStock.currPrice.toFixed(2)})
-                  </small>
+                  <small>(Current Price: ₹{selectedStock.currPrice.toFixed(2)})</small>
                 </div>
               </DialogContentText>
             </DialogContent>
@@ -167,7 +170,7 @@ function HoldingCount({ allHoldings, totalInvestment, totalCurrValue }) {
           </>
         )}
       </Dialog>
-    </>
+    </div>
   );
 }
 

@@ -12,10 +12,17 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { uidContext } from "../Content/context";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 import WarningIcon from "@mui/icons-material/Warning";
 import axios from "axios";
-import { useCookies } from "react-cookie";
+import Badge from "@mui/material/Badge";
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import TurnedInIcon from '@mui/icons-material/TurnedIn';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import FindInPageIcon from '@mui/icons-material/FindInPage';
+import DataThresholdingIcon from '@mui/icons-material/DataThresholding';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+
 
 function Menuu() {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -39,9 +46,13 @@ function Menuu() {
   const logout = async () => {
     try {
       setLoading(true);
-      await axios.post(`${import.meta.env.VITE_API_URL}/logout`, {}, {
-        withCredentials: true
-      }); 
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/logout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
       window.open(`${import.meta.env.VITE_API_URL_FRONTEND}/signup`, "_blank");
       window.close();
     } catch (e) {
@@ -53,8 +64,8 @@ function Menuu() {
     setAnchorElUser(null);
   };
 
-  const avaterFind = async()=>{
-    setUsernameLoading(true)
+  const avaterFind = async () => {
+    setUsernameLoading(true);
     try {
       let userRes = await axios.post(
         `${import.meta.env.VITE_API_URL}/user/find`,
@@ -66,18 +77,18 @@ function Menuu() {
       const { user } = userRes.data;
       setUserr(user);
       setUserAvater(user.name.charAt(0));
-      setUsernameLoading(false)
+      setUsernameLoading(false);
     } catch (error) {
-      setUsernameLoading(false)
+      setUsernameLoading(false);
       toast.error("something went wrong", {
         position: "top-right",
         autoclose: 2000,
       });
     }
-  }
-  useEffect(()=>{
+  };
+  useEffect(() => {
     avaterFind();
-  },[]);
+  }, []);
   return (
     <>
       <div className="col-8 menu-main">
@@ -134,19 +145,19 @@ function Menuu() {
         </div>
         <div className="prifile-main">
           <div className="mt-2 notification">
-            <NotificationsOutlinedIcon
-              style={{ cursor: "pointer" }}
-              onClick={toto}
-            />
+            <Badge badgeContent={0} color="primary" showZero>
+              <NotificationsOutlinedIcon
+                style={{ cursor: "pointer" }}
+                onClick={toto}
+              />
+            </Badge>
           </div>
           <div className="" style={{ paddingRight: "1rem" }}>
             <div className="">
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      alt="Remy Sharp"
-                    >{userAvater}</Avatar>
+                    <Avatar alt="Remy Sharp">{userAvater}</Avatar>
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -180,10 +191,79 @@ function Menuu() {
                           height: "30px",
                           marginRight: "1rem",
                         }}
-                      >{userAvater}</Avatar>
-                      {usernameLoading ? <CircularProgress size="15px" /> : userr.username}
+                      >
+                        {userAvater}
+                      </Avatar>
+                      {usernameLoading ? (
+                        <CircularProgress size="15px" />
+                      ) : (
+                        userr.username
+                      )}
                     </Typography>
                   </MenuItem>
+                  <div className="mobile-menu">
+                    <MenuItem>
+                      <NavLink
+                        to={`/dashboard/${uId}/summery`}
+                        className={(e) => (e.isActive ? "text-warning" : "")}
+                        onClick={handleCloseUserMenu}
+                      >
+                        <DashboardIcon style={{ marginRight: "1rem" }} />
+                        Dashboard
+                      </NavLink>
+                    </MenuItem>
+                    <MenuItem>
+                      <NavLink
+                        to={`/dashboard/${uId}/Wishlists`}
+                        className={(e) => (e.isActive ? "text-warning" : "")}
+                        onClick={handleCloseUserMenu}
+                      >
+                        <TurnedInIcon style={{ marginRight: "1rem" }} />
+                        Wishlists
+                      </NavLink>
+                    </MenuItem>
+                    <MenuItem>
+                      <NavLink
+                        to={`/dashboard/${uId}/allStock`}
+                        className={(e) => (e.isActive ? "text-warning" : "")}
+                        onClick={handleCloseUserMenu}
+                      >
+                        <FindInPageIcon style={{ marginRight: "1rem" }} />
+                        All&nbsp;Stocks
+                      </NavLink>
+                    </MenuItem>
+                    <MenuItem>
+                      <NavLink
+                        to={`/dashboard/${uId}/orders`}
+                        className={(e) => (e.isActive ? "text-warning" : "")}
+                        onClick={handleCloseUserMenu}
+                      >
+                        <AssignmentTurnedInIcon style={{ marginRight: "1rem" }} />
+                        Orders
+                      </NavLink>
+                    </MenuItem>
+                    <MenuItem>
+                      <NavLink
+                        to={`/dashboard/${uId}/holdings`}
+                        className={(e) => (e.isActive ? "text-warning" : "")}
+                        onClick={handleCloseUserMenu}
+                      >
+                        <DataThresholdingIcon style={{ marginRight: "1rem" }} />
+                        Holdings
+                      </NavLink>
+                    </MenuItem>
+                    <MenuItem>
+                      <NavLink
+                        to={`/dashboard/${uId}/funds`}
+                        className={(e) => (e.isActive ? "text-warning" : "")}
+                        onClick={handleCloseUserMenu}
+                      >
+                        <AccountBalanceWalletIcon style={{ marginRight: "1rem" }} />
+                        Funds
+                      </NavLink>
+                    </MenuItem>
+                   
+                  </div>
                   <MenuItem
                     key={1}
                     onClick={() => {
@@ -232,13 +312,19 @@ function Menuu() {
               >
                 Cancel
               </button>
-              {
-                loading? <button type="button" className="btn btn-danger" disabled>
-                Loading...
-              </button> : <button type="button" className="btn btn-danger" onClick={logout}>
-                Confirm
-              </button>
-              }
+              {loading ? (
+                <button type="button" className="btn btn-danger" disabled>
+                  Loading...
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={logout}
+                >
+                  Confirm
+                </button>
+              )}
             </div>
           </div>
         </div>

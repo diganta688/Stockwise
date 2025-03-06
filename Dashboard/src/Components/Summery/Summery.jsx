@@ -116,6 +116,7 @@ function Summery() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          paddingBottom: "6rem"
         }}
       >
         <div
@@ -128,7 +129,7 @@ function Summery() {
         >
           WishList
         </div>
-        <div className="" style={{ width: "70%" }}>
+        <div className="" style={{ width: "70%"}}>
           <Chart data={data} />
         </div>
       </div>

@@ -77,7 +77,7 @@ function TopBar() {
   return (
     <div className="container-fluid p-0">
       <div className="row">
-        <div className="col-4">
+        <div className="col-4 nifty-div-top">
           <div className="row nifty-div" style={{ height: "100%" }}>
             <div className="col">
               <span>NIFTY50</span>

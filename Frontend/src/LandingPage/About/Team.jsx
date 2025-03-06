@@ -21,7 +21,7 @@ function Team() {
             <p style={{ color: "#9b9b9b" }}>Founder, CEO</p>
           </div>
         </div>
-        <div className="col-5 mt-4">
+        <div className="col-5 mt-4 founter-text">
           <p>
             Diganta bootstrapped and founded this Stock exchange platform in
             2010 to overcome the hurdles he faced during his decade long stint

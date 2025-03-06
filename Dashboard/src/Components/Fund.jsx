@@ -12,27 +12,13 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CircularProgress from "@mui/material/CircularProgress";
 
-const loadRazorpay = () => {
-  return new Promise((resolve) => {
-    if (window.Razorpay) {
-      resolve(true);
-      return;
-    }
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-    document.body.appendChild(script);
-  });
-};
-
 const Funds = () => {
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState("");
   const [walletBalance, setWalletBalance] = useState(0);
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [addFundOpen, setAddFundOpen] = useState(false);
-  let { id } = useParams();
+  const { id } = useParams();
   const [transactions, setTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [transactionsPerPage] = useState(10);
@@ -42,17 +28,30 @@ const Funds = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/transaction-history/${id}`
       );
-      const sortedTransactions = response.data.sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      );
-      setTransactions(sortedTransactions);
+      setTransactions(response.data.sort((a, b) => new Date(b.date) - new Date(a.date)));
     } catch (error) {
-      toast.error("Error fetching transaction history", {
-        position: "top-right",
-        autoclose: 2000,
-      });
+      toast.error("Error fetching transaction history");
     }
   };
+
+  const fetchWalletBalance = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/wallet-balance/${id}`
+      );
+      setWalletBalance(response.data.balance);
+    } catch (error) {
+      toast.error("Error fetching wallet balance");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchWalletBalance();
+    fetchTransactionHistory();
+  }, []);
 
   const indexOfLastTransaction = currentPage * transactionsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
@@ -63,108 +62,40 @@ const Funds = () => {
   const totalPages = Math.ceil(transactions.length / transactionsPerPage);
 
   const handleWithdraw = async () => {
-    if (
-      !amount ||
-      isNaN(amount) ||
-      Number(amount) <= 0 ||
-      amount > walletBalance
-    ) {
-      toast.error("Please enter a valid amount!", {
-        position: "top-right",
-        autoclose: 2000,
-      });
+    if (!amount || isNaN(amount) || amount <= 0 || amount > walletBalance) {
+      toast.error("Please enter a valid amount!");
       return;
     }
-
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/withdraw-funds/${id}`,
-        {
-          amount: Number(amount),
-        }
+        { amount: Number(amount) }
       );
-
       if (response.data.status === "ok") {
-        toast.success(
-          `Withdrawal successful! New Balance: ₹${response.data.newBalance}`,
-          { position: "top-right", autoclose: 2000 }
-        );
+        toast.success(`Withdrawal successful! New Balance: ₹${response.data.newBalance}`);
         setWithdrawOpen(false);
         setAmount("");
         fetchWalletBalance();
         fetchTransactionHistory();
       }
-      await fetchTransactionHistory();
-      setCurrentPage(1);
-    } catch (error) {
-      toast.error("Withdrawal failed", {
-        position: "top-right",
-        autoclose: 2000,
-      });
-    }
-  };
-
-  useEffect(() => {
-    fetchWalletBalance();
-    fetchTransactionHistory();
-  }, []);
-
-  const fetchWalletBalance = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/wallet-balance/${id}`
-      );
-      setWalletBalance(response.data.balance);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      toast.error("Error fetching wallet balance:", {
-        position: "top-right",
-        autoclose: 2000,
-      });
+    } catch {
+      toast.error("Withdrawal failed");
     }
   };
 
   const handlePayment = async () => {
     if (!amount || amount < 100 || amount > 10000) {
-      toast.error("Please enter a valid amount!", {
-        position: "top-right",
-        autoclose: 2000,
-      });
+      toast.error("Please enter a valid amount!");
       return;
     }
 
     try {
       const orderResponse = await axios.post(
         `${import.meta.env.VITE_API_URL}/create-order`,
-        {
-          amount: amount * 100,
-          currency: "INR",
-          receipt: `receipt_${id}`,
-          notes: { userId: id },
-        }
+        { amount: amount , currency: "INR", receipt: `receipt_${id}`, notes: { userId: id } }
       );
 
       const order = orderResponse.data;
-
-      const razorpayLoaded = await loadRazorpay();
-      if (!razorpayLoaded) {
-        toast.error("Razorpay SDK failed to load. Are you online?", {
-          position: "top-right",
-          autoclose: 2000,
-        });
-        return;
-      }
-
-      if (typeof window.Razorpay === "undefined") {
-        toast.error("Razorpay SDK not loaded. Please refresh and try again.", {
-          position: "top-right",
-          autoclose: 2000,
-        });
-        return;
-      }
-
       const options = {
         key: "rzp_test_HmPIoX9smDWmp5",
         amount: order.amount,
@@ -173,227 +104,118 @@ const Funds = () => {
         description: "Test Transaction",
         order_id: order.id,
         handler: async (response) => {
-          try {
-            const verificationResponse = await axios.post(
-              `${import.meta.env.VITE_API_URL}/verify-payment/${id}`,
-              {
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-              }
-            );
-
-            if (verificationResponse.data.status === "ok") {
-              toast.success("Payment Successful!", {
-                position: "top-right",
-                autoclose: 2000,
-              });
-              setAddFundOpen(false);
-              fetchWalletBalance();
-              fetchTransactionHistory();
-            } else {
-              toast.error("Payment verification failed", {
-                position: "top-right",
-                autoclose: 2000,
-              });
-            }
-          } catch (error) {
-            toast.error("Error verifying payment", {
-              position: "top-right",
-              autoclose: 2000,
-            });
-          }
+          const verification = await axios.post(
+            `${import.meta.env.VITE_API_URL}/verify-payment/${id}`,
+            response
+          );
+          if (verification.data.status === "ok") {
+            toast.success("Payment Successful!");
+            setAddFundOpen(false);
+            fetchWalletBalance();
+            fetchTransactionHistory();
+          } else toast.error("Payment verification failed");
         },
       };
-
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-    } catch (error) {
-      toast.error("Error processing payment", {
-        position: "top-right",
-        autoclose: 2000,
-      });
+      new window.Razorpay(options).open();
+    } catch {
+      toast.error("Error processing payment");
     }
   };
 
   return (
-    <div className="container mt-4">
-      <div className="card">
+    <div className="container-fluid p-3">
+      <div className="card p-3 mb-3">
         <h3>
           Wallet Balance:
-          {loading ? (
-            <CircularProgress size="20px" />
-          ) : (
-            `₹${(walletBalance || 0).toFixed(2)}`
-          )}
+          {loading ? <CircularProgress size="20px" /> : `₹${walletBalance.toFixed(2)}`}
         </h3>
       </div>
-      <div className="d-flex justify-content-end mt-3">
-        <p className="funds-add">Instant, zero fund transfers with UPI</p>
-        <button
-          className="btn btn-success me-2"
-          onClick={() => {
-            setAddFundOpen(true);
-          }}
-        >
-          Add Funds
-        </button>
-        <button
-          className="btn btn-primary"
-          onClick={() => {
-            setWithdrawOpen(true);
-          }}
-        >
-          Withdraw
-        </button>
-      </div>
-
-      <React.Fragment>
-        <Dialog
-          open={addFundOpen}
-          onClose={() => {
-            setAddFundOpen(false);
-          }}
-        >
-          <DialogTitle>Add Funds in your wallet</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Enter the Ammount (min 100INR | One time max 10000INR)
-            </DialogContentText>
-            <TextField
-              onChange={(e) => setAmount(e.target.value)}
-              autoFocus
-              required
-              margin="dense"
-              id="name"
-              name="number"
-              label="Ammount"
-              type="number"
-              fullWidth
-              variant="standard"
-              value={amount}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => {
-                setAddFundOpen(false);
-                setAmount("");
-              }}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" onClick={handlePayment}>
-              Pay now
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </React.Fragment>
-
-      <React.Fragment>
-        <Dialog
-          open={withdrawOpen}
-          onClose={() => {
-            setWithdrawOpen(false);
-          }}
-        >
-          <DialogTitle>Withdraw</DialogTitle>
-          <DialogContent>
-            <DialogContentText>Enter the withdraw amount</DialogContentText>
-            <TextField
-              onChange={(e) => setAmount(e.target.value)}
-              autoFocus
-              required
-              margin="dense"
-              id="name"
-              name="number"
-              label="Ammount"
-              type="number"
-              fullWidth
-              variant="standard"
-              value={amount}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => {
-                setWithdrawOpen(false);
-                setAmount("");
-              }}
-            >
-              Cancel
-            </Button>
-
-            <Button type="submit" onClick={handleWithdraw}>
-              Withdraw
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </React.Fragment>
-
-      <div className="transaction-history mt-4">
-        <h3>Transaction History</h3>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Type</th>
-              <th>Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentTransactions.length === 0 ? (
-              <tr>
-                <td colSpan="3">No transactions found</td>
-              </tr>
-            ) : (
-              currentTransactions.map((txn, index) => (
-                <tr key={index}>
-                  <td>{new Date(txn.date).toLocaleString()}</td>
-                  <td
-                    style={{
-                      color:
-                        txn.type === "deposit" || txn.type === "SELLStock"
-                          ? "green"
-                          : "red",
-                    }}
-                  >
-                    {txn.type === "deposit"
-                      ? "Deposit"
-                      : txn.type === "withdraw"
-                      ? "Withdraw"
-                      : txn.type === "BUY Stock"
-                      ? "BUY Stock"
-                      : "SELL Stock"}
-                  </td>
-                  <td>₹{txn.amount}</td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-
-        {/* Pagination Controls */}
-        <div className="d-flex justify-content-between align-items-center">
-          <button
-            className="btn btn-outline-primary"
-            onClick={() => setCurrentPage(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            className="btn btn-outline-primary"
-            onClick={() => setCurrentPage(currentPage + 1)}
-            disabled={currentPage === totalPages || transactions.length === 0}
-          >
-            Next
-          </button>
+      <div className="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <p className="mb-2">Instant, zero fund transfers with UPI</p>
+        <div className="d-flex gap-2">
+          <button className="btn btn-success" onClick={() => setAddFundOpen(true)}>Add Funds</button>
+          <button className="btn btn-primary" onClick={() => setWithdrawOpen(true)}>Withdraw</button>
         </div>
       </div>
+      <div className="transaction-history">
+        <h3>Transaction History</h3>
+        <div className="table-responsive">
+          <table className="table table-bordered">
+            <thead className="table-light">
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+  {currentTransactions.length === 0 ? (
+    <tr><td colSpan="3">No transactions found</td></tr>
+  ) : (
+    currentTransactions.map((txn, index) => {
+      const isGreen = txn.type.includes("deposit") || txn.type.includes("SELLStock");
+      const isRed = txn.type.includes("withdraw") || txn.type.includes("BUY Stock");
+
+      return (
+        <tr key={index}>
+          <td>{new Date(txn.date).toLocaleString()}</td>
+          <td style={{ color: isGreen ? "green" : isRed ? "red" : "black" }}>
+            {txn.type
+              .replace("deposit", "Deposit")
+              .replace("withdraw", "Withdraw")
+              .replace("SELLStock", "Sell Stock")
+              .replace("BUYStock", "Buy Stock")}
+          </td>
+          <td>₹{txn.amount}</td>
+        </tr>
+      );
+    })
+  )}
+</tbody>
+
+          </table>
+        </div>
+        <div className="d-flex justify-content-between align-items-center mt-3">
+          <button
+            className="btn btn-outline-primary"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >Previous</button>
+          <span>Page {currentPage} of {totalPages}</span>
+          <button
+            className="btn btn-outline-primary"
+            disabled={currentPage === totalPages || transactions.length === 0}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >Next</button>
+        </div>
+      </div>
+      <Dialog open={addFundOpen} onClose={() => setAddFundOpen(false)}>
+        <DialogTitle>Add Funds</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Min ₹100, Max ₹10000</DialogContentText>
+          <TextField
+            fullWidth variant="standard" label="Amount" type="number"
+            value={amount} onChange={(e) => setAmount(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setAddFundOpen(false)}>Cancel</Button>
+          <Button onClick={handlePayment}>Pay Now</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={withdrawOpen} onClose={() => setWithdrawOpen(false)}>
+        <DialogTitle>Withdraw Funds</DialogTitle>
+        <DialogContent>
+          <TextField fullWidth variant="standard" label="Amount" type="number"
+            value={amount} onChange={(e) => setAmount(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setWithdrawOpen(false)}>Cancel</Button>
+          <Button onClick={handleWithdraw}>Withdraw</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

@@ -2,12 +2,11 @@ const mongoose = require("mongoose");
 
 const orderPaymentSchema = new mongoose.Schema({
   order_id: { type: String, required: true, unique: true },
-  amount: { type: Number, required: true },
-  currency: { type: String, required: true },
-  receipt: { type: String, required: true },
-  status: { type: String, required: true, default: "created" },
-  payment_id: { type: String, unique: true },
-}, { timestamps: true });
+  payment_id: { type: String, default: "" },  // Removed unique
+  amount: Number,
+  currency: String,
+  receipt: String,
+  status: { type: String, enum: ["created", "paid"], default: "created" },
+});
 
-const OrderPayment = mongoose.model("OrderPayment", orderPaymentSchema);
-module.exports = OrderPayment;
+module.exports = mongoose.model("OrderPayment", orderPaymentSchema);

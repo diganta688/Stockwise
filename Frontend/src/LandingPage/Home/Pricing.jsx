@@ -3,9 +3,9 @@ import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 
 function Pricing() {
   return (
-    <div className="container p-5">
-      <div className="row p-5">
-        <div className="col-5">
+    <div className="container p-5 pricing-container">
+      <div className="row p-5 pricing-row">
+        <div className="col-5 pricing-text">
           <h1 className="fs-2">Unbeatable pricing</h1>
           <p className="text-muted">
             We pioneered the concept of discount broking and price transparency
@@ -16,7 +16,7 @@ function Pricing() {
             <ArrowRightAltIcon/>
           </a>
         </div>
-        <div className="col-7 mt-4">
+        <div className="col-7 mt-4 pricing-img">
           <div className="row">
             <div className="col-4">
               <div className="row ">
@@ -24,7 +24,6 @@ function Pricing() {
                   <img
                     src="media\Images\rup-0.svg"
                     alt="rupees0"
-                    style={{ width: "120px" }}
                   />
                 </div>
                 <div
@@ -45,7 +44,6 @@ function Pricing() {
                   <img
                     src="media\Images\rup-0.svg"
                     alt="rupees0"
-                    style={{ width: "120px" }}
                   />
                 </div>
                 <div
@@ -69,7 +67,6 @@ function Pricing() {
                   <img
                     src="media\Images\rup-20.svg"
                     alt="rupees20"
-                    style={{ width: "120px" }}
                   />
                 </div>
                 <div

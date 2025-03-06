@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "react-router-dom";
-import { counterUpdate } from "../Content/context";
+import { counterUpdate } from "../../Content/context";
 
 function Wishlist() {
   let value = useContext(counterUpdate);
@@ -101,25 +101,22 @@ function Wishlist() {
   }, []);
 
   return (
-    <div className="row">
-      <div className="col-10">
-        <h3>Your WISHLIST</h3>
+    <>
+    <div className="wishlist-container">
+      <div className="wishlist-header">
+        <h3>Your Wishlist</h3>
+        <p>{allWishlist.length}/10</p>
       </div>
-      <div className="col-2">
-        <p className="m-0">{allWishlist.length}/10</p>
-      </div>
-      <div className="row mt-4 p-0">
-        <ul
-          className="px-0"
-          style={{ listStyle: "none", marginBottom: "5rem" }}
-        >
-          {allWishlist.map((stock, idx) => (
-            <WatchListItems stock={stock} key={idx} />
-          ))}
-        </ul>
-      </div>
+
+      <ul className="wishlist-list">
+        {allWishlist.map((stock, idx) => (
+          <WatchListItems stock={stock} key={idx} />
+        ))}
+      </ul>
     </div>
-  );
+    </>
+);
+
 }
 
 export default Wishlist;
