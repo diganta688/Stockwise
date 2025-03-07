@@ -20,11 +20,7 @@ function Hero() {
           bonds, and more.
         </p>
         <button 
-<<<<<<< HEAD
-          style={{maxWidth: "188px", margin: "0 auto", background: "#387ed1" }}
-=======
           style={{ margin: "0 auto", background: "#387ed1" }}
->>>>>>> f34197c24902b0cb99dd95803b31d69e7e105680
           className="fs-5"
           onClick={()=>  navigate("/signup")}
         >
