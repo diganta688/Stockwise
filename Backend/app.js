@@ -50,8 +50,8 @@ const sessionoption = {
   cookie: {
     expires: Date.now() + 1 * 24 * 60 * 60 * 1000,
     maxAge: 1 * 24 * 60 * 60 * 1000,
-    secure: false,
-    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production", // Only send cookies over HTTPS in production
+  sameSite: "None"
   },
 };
 

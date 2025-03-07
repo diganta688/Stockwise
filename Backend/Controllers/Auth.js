@@ -4,8 +4,8 @@ const { generateToken, verifyToken } = require("../util/jwt");
 
 const cookieOptions = {
   httpOnly: true,
-  secure:false, // Only send cookies over HTTPS in production
-  sameSite: "lax", // Required for cross-origin cookies
+  secure: process.env.NODE_ENV === "production", // Only send cookies over HTTPS in production
+  sameSite: "None", // Required for cross-origin cookies
   maxAge: 24 * 60 * 60 * 1000, // 1 day
 };
 
