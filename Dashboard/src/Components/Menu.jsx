@@ -94,9 +94,9 @@ function Menuu() {
       <div className="col-8 menu-main">
         <div className="logo">
           <img
-            src="\media\Images\kiteOriginal.png"
+            src="\media\Images\StockWise1.png"
             alt=""
-            style={{ width: "5%", minWidth: "40px" }}
+            style={{ width: "13%", minWidth: "40px" }}
           />
         </div>
         <div className="menu">
