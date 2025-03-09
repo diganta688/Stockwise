@@ -89,7 +89,7 @@ body {
 }
 
 .dashboard {
-  padding-bottom: 5rem !important;
+  padding-bottom: 15rem !important;
   margin-bottom: 2rem;
   height: 100vh;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

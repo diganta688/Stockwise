@@ -2,6 +2,7 @@ html,
 body {
   overflow-x: hidden;
 }
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -19,7 +20,7 @@ body {
 
 #root {
   width: 100%;
-   : 0 auto;
+  margin: 0 auto;
 }
 
 body {
@@ -40,10 +41,11 @@ a {
   text-decoration: none;
 }
 
-a{
+a {
   color: #000dff85;
   font-weight: 500;
 }
+
 a:hover {
   color: #535bf2;
 }
@@ -89,8 +91,9 @@ button:focus-visible {
   }
 }
 
-.red{
-  color:yellow; ;
+.red {
+  color: yellow;
+  ;
   background-color: transparent;
 }
 
@@ -106,11 +109,12 @@ button:focus-visible {
   backdrop-filter: blur(5px);
 }
 
-.logo{
-  width:10%
+.logo {
+  width: 10%;
+  filter: drop-shadow(0 0 5px white);
 }
 
-.logo img{
+.logo img {
   width: 100%;
 }
 
@@ -190,46 +194,46 @@ button:focus-visible {
   margin-right: 20px;
 }
 
-.red{
+.red {
   color: rgb(56, 126, 209);
 
 }
 
 
-.about-first-row{
+.about-first-row {
   padding: 100px 0 100px 0;
   font-size: 2rem;
   line-height: 1.5;
   font-weight: 600;
 }
 
-.imageFounder img{
+.imageFounder img {
   width: 50%;
   border-radius: 50%;
 }
 
-.people{
+.people {
   font-size: 2rem;
   line-height: 1.5;
   font-weight: 600;
 }
 
-.product-hero{
+.product-hero {
   font-size: 3rem;
   line-height: 1.5;
   font-weight: 600;
 }
 
-.product-hero-sub{
+.product-hero-sub {
   font-size: 1rem;
 }
 
-.row-first-product{
+.row-first-product {
   padding: 100px 0 100px 0;
 
 }
 
-.product-univerce-partners{
+.product-univerce-partners {
   color: #000;
   text-decoration: none;
   font-weight: 400;
@@ -237,7 +241,7 @@ button:focus-visible {
   width: 250px;
 }
 
-.partners{
+.partners {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -266,7 +270,8 @@ table {
   margin-top: 20px;
 }
 
-table th, table td {
+table th,
+table td {
   border: 1px solid #ccc;
   padding: 10px;
   text-align: left;
@@ -278,7 +283,7 @@ table th, table td {
   border-bottom: 2px solid #007bff;
 }
 
-.support-links-top{
+.support-links-top {
   margin-top: 10px;
   padding-left: 55px;
   display: flex;
@@ -288,25 +293,65 @@ table th, table td {
   margin-bottom: 15%;
 }
 
-.support-links-top a{
+.support-links-top a {
   color: white !important;
-  text-decoration: underline; 
+  text-decoration: underline;
 }
 
-.track-ticket{
+.track-ticket {
   display: flex;
   justify-content: flex-end;
 }
 
-.track-ticket-sub{
+.track-ticket-sub {
   width: 151px;
 }
 
-.support-main{
+.support-main {
   background: #387ed1;
   color: white;
 }
 
-.MuiSvgIcon-root{
+.MuiSvgIcon-root {
   margin-bottom: 8px;
+}
+
+
+@media (max-width: 998px) {
+
+  .stats-img,
+  .stats-text {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .award,
+  .award-text,
+  .stateinfoimg,
+  .pricing-img,
+  .pricing-text,
+  .education-image,
+  .education-text,
+  .about-text-left,
+  .about-text-right,
+  .imageFounder,
+  .founter-text {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .container,
+  .row,
+  .col-1,
+  .col-2,
+  .col-3,
+  .col-4,
+  .col-5,
+  .col-6 {
+    padding: 1rem !important;
+  }
 }

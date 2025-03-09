@@ -10,7 +10,7 @@ function Awards() {
         <div className="col-6 mt-5 award-text">
           <h1 className="fs-2">Largest stock brocker in India</h1>
           <p>
-            2+ million TradeSphere cllents contribute to over 15% of all retail
+            2+ million StockWISE cllents contribute to over 15% of all retail
             order volumes in India daily by trading and investing in:
           </p>
           <div className="row text-cente">

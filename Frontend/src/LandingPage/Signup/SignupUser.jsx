@@ -127,8 +127,8 @@ useEffect(()=>{
       </div>
       <div className="container">
         <form method="post" onSubmit={handleSubmit}>
-          <div className="row p-5" style={{ justifyContent: "center" }}>
-            <div className="col-5">
+          <div className="row p-5 signup-user" style={{ justifyContent: "center" }}>
+            <div className="col-5" style={{width: "100%"}}>
               <div className="row m-4">
                 <h4>Fill up your personal details</h4>
               </div>

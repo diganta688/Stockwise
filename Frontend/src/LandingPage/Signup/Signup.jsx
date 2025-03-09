@@ -86,7 +86,7 @@ function Signup() {
   return (
     <div className="container ">
       <div className="row p-5">
-        <div className="col-8 signup-col">
+        <div className="col-8 signup-col" style={{margin: "0 auto"}}>
           <img
             src="media/Images/signup.png"
             alt="Signup Illustration"
@@ -94,7 +94,7 @@ function Signup() {
             style={{ width: "100%" }}
           />
         </div>
-        <div className="col d-flex flex-column justify-content-center">
+        <div className="col d-flex flex-column justify-content-center" style={{minWidth: "264px"}}>
           <form onSubmit={handleSubmit}>
             <div className="mb-2 px-2">
               <h2>Verify Phone Number</h2>
@@ -168,11 +168,11 @@ function Signup() {
       </div>
       <div className="row text-center">
         <p className="disclaimer">
-          I authorise TradeSphere to contact me even if my number is registered
-          on DND. I authorise TradeSphere to fetch my KYC information from the
+          I authorise StockWISE to contact me even if my number is registered
+          on DND. I authorise StockWISE to fetch my KYC information from the
           C-KYC registry with my PAN. Please visit <a href="/">this article</a>{" "}
           to know more. By submitting your contact details, you authorize
-          TradeSphere to contact you even if you are registered on DND & conduct
+          StockWISE to contact you even if you are registered on DND & conduct
           online KYC for trading & demat account opening as per KRA regulations
           and PMLA guidelines. If you are looking to open a HUF, Corporate,
           Partnership, or NRI account, you have to use the{" "}

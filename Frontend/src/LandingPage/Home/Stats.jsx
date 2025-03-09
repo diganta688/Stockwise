@@ -13,7 +13,7 @@ function Stats() {
           <div className="why-us ">
             <h2 className="fs-4">Customer-first always</h2>
             <p className="text-muted">
-              That's why 1.5+ crore customers trust TradeSphere with ₹4.5+ lakh
+              That's why 1.5+ crore customers trust StockWISE with ₹4.5+ lakh
               crores of equity investments and contribute to 15% of daily retail
               exchange volumes in India.
             </p>
@@ -26,7 +26,7 @@ function Stats() {
             </p>
           </div>
           <div className="why-us ">
-            <h2 className="fs-4">The TradeSphere universe</h2>
+            <h2 className="fs-4">The StockWISE universe</h2>
             <p className="text-muted">
               Not just an app, but a whole ecosystem. Our investments in 30+
               fintech startups offer you tailored services specific to your

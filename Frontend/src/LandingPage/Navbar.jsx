@@ -8,7 +8,7 @@ function Navbar() {
         <div className="logo">
           <NavLink className="navbar-brand" to="/">
             <img
-              src="\media\Images\logo.svg"
+              src="media\Images\StockWise1.png"
               alt="Logo"
             />
           </NavLink>

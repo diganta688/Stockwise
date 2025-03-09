@@ -4,9 +4,9 @@ const { generateToken, verifyToken } = require("../util/jwt");
 
 const cookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production", // Only send cookies over HTTPS in production
-  sameSite: "None",
-  maxAge: 24 * 60 * 60 * 1000, // 1 day
+  secure: process.env.NODE_ENV === "production" ? true : false,
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  maxAge: 24 * 60 * 60 * 1000,
 };
 
 module.exports.Signup = async (req, res) => {

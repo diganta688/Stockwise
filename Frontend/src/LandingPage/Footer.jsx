@@ -10,13 +10,13 @@ function Footer() {
         <div className="footer-first">
           <div className="footer-first-col">
             <img
-              src="media\Images\logo.svg"
+              src="media\Images\StockWise1.png"
               alt="logo"
-              style={{ width: "50%" }}
+              style={{ width: "45%" }}
               className="mb-4 mt-1"
             />
             <p className="stock-copy-right">
-              © 2010 - 2024, TradeSphere Broking Ltd. All rights reserved.
+              © 2010 - 2024, StockWISE Broking Ltd. All rights reserved.
             </p>
             <div className="social-icon ">
               <div className="border-bottom p-1">
@@ -53,13 +53,13 @@ function Footer() {
                 <li className="foot-li">Careers</li>
               </a>
               <a href="">
-                <li className="foot-li">TradeSphere.tech</li>
+                <li className="foot-li">StockWISE.tech</li>
               </a>
               <a href="">
                 <li className="foot-li">Press & media</li>
               </a>
               <a href="">
-                <li className="foot-li">TradeSphere Cares</li>
+                <li className="foot-li">StockWISE Cares</li>
               </a>
             </ul>
           </div>
@@ -115,16 +115,16 @@ function Footer() {
         </div>
         <div className="footer-info">
           <p>
-            TradeSphere Broking Ltd.: Member of NSE, BSE​ &​ MCX – SEBI
+            StockWISE Broking Ltd.: Member of NSE, BSE​ &​ MCX – SEBI
             Registration no.: INZ000031633 CDSL/NSDL: Depository services
-            through TradeSphere Broking Ltd. – SEBI Registration no.:
-            IN-DP-431-2019 Commodity Trading through TradeSphere Commodities
+            through StockWISE Broking Ltd. – SEBI Registration no.:
+            IN-DP-431-2019 Commodity Trading through StockWISE Commodities
             Pvt. Ltd. MCX: 46025; NSE-50001 – SEBI Registration no.:
-            INZ000038238 Registered Address: TradeSphere Broking Ltd., #153/154,
+            INZ000038238 Registered Address: StockWISE Broking Ltd., #153/154,
             4th Cross, Dollars Colony, Opp. Clarence Public School, J.P Nagar
             4th Phase, Bengaluru - 560078, Karnataka, India. For any complaints
             pertaining to securities broking please write to
-            complaints@TradeSphere.com, for DP related to dp@TradeSphere.com.
+            complaints@StockWISE.com, for DP related to dp@StockWISE.com.
             Please ensure you carefully read the Risk Disclosure Document as
             prescribed by SEBI | ICF
           </p>
@@ -165,7 +165,7 @@ function Footer() {
             of allotment. In case of non allotment the funds will remain in your
             bank account. As a business we don't give stock tips, and have not
             authorized anyone to trade on behalf of others. If you find anyone
-            claiming to be part of TradeSphere and offering such services,
+            claiming to be part of StockWISE and offering such services,
             please create a ticket here.
           </p>
         </div>
