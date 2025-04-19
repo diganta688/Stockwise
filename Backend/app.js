@@ -51,7 +51,7 @@ const sessionoption = {
     expires: Date.now() + 1 * 24 * 60 * 60 * 1000,
     maxAge: 1 * 24 * 60 * 60 * 1000,
     secure: process.env.NODE_ENV === "production" ? true : false,
-  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   },
 };
 
@@ -424,7 +424,10 @@ const razorpay = new Razorpay({
 
 app.post("/create-order", async (req, res) => {
   try {
-    const { amount, currency, receipt, notes } = req.body;
+    const { amount, currency = "INR", receipt, notes } = req.body;
+    if (!amount || !receipt) {
+      return res.status(400).json({ error: "Amount and receipt are required" });
+    }
     const order = await razorpay.orders.create({
       amount,
       currency,
@@ -483,7 +486,7 @@ app.post("/verify-payment/:id", async (req, res) => {
       amount: order.amount / 100,
     });
     await transaction.save();
-    res.json({ status: "ok" });
+    res.json({ status: "ok", newBalance: wallet.balance });
   } catch (error) {
     console.error("Payment verification error:", error);
     res.status(500).json({ error: "Error verifying payment" });
@@ -505,14 +508,17 @@ app.get("/wallet-balance/:id", async (req, res) => {
 app.get("/transaction-history/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const transactions = await Transaction.find({ userId: id });
-
+    const { type } = req.query;
+    const filter = { userId: id };
+    if (type) filter.type = type;
+    const transactions = await Transaction.find(filter).sort({ createdAt: -1 });
     res.json(transactions);
   } catch (error) {
     console.error("Transaction history error:", error);
     res.status(500).json({ error: "Error fetching transaction history" });
   }
 });
+
 
 app.post("/withdraw-funds/:id", async (req, res) => {
   try {
