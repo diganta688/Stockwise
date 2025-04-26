@@ -47,7 +47,7 @@ function Menuu() {
     try {
       setLoading(true);
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/logout`,
+        `${import.meta.env.VITE_API_URL}/user/logout`,
         {},
         {
           withCredentials: true,

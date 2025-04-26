@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { counterUpdate } from "../../Content/context";
-import "./HoldingCount.css";  // Keep your CSS for other styling
+import "./HoldingCount.css";
 
 function HoldingCount({ allHoldings, totalInvestment, totalCurrValue }) {
   let { id } = useParams();
@@ -47,7 +47,7 @@ function HoldingCount({ allHoldings, totalInvestment, totalCurrValue }) {
     if (sellQty > 0) {
       try {
         const response = await axios.post(
-          `${import.meta.env.VITE_API_URL}/sell-stock`,
+          `${import.meta.env.VITE_API_URL}/payment/sell-stock`,
           {
             stockId: selectedStock._id,
             userId: id,
@@ -67,7 +67,6 @@ function HoldingCount({ allHoldings, totalInvestment, totalCurrValue }) {
 
   return (
     <div className="order-table-wrapper">
-      {/* Scrollable table container */}
       <div className="order-table-scroll">
         <table className="order-table">
           <thead>
@@ -112,7 +111,6 @@ function HoldingCount({ allHoldings, totalInvestment, totalCurrValue }) {
         </table>
       </div>
 
-      {/* Summary Section (Fixed) */}
       <div className="investment-summary">
         <div className="summary-item">
           <h5>{totalInvestment.toFixed(2)}</h5>
@@ -128,7 +126,6 @@ function HoldingCount({ allHoldings, totalInvestment, totalCurrValue }) {
         </div>
       </div>
 
-      {/* Sell Dialog */}
       <Dialog
         open={open}
         onClose={handleClose}

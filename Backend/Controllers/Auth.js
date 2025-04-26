@@ -9,66 +9,66 @@ const cookieOptions = {
   maxAge: 24 * 60 * 60 * 1000,
 };
 
-module.exports.Signup = async (req, res) => {
-  try {
-    const { name, username, email, password, phoneNumber } = req.body;
-    const existingUser = await UserModel.findOne({
-      $or: [{ phoneNumber }, { username }],
-    });
-    if (existingUser) {
-      if (existingUser.phoneNumber === phoneNumber) {
-        return res.status(400).json({ message: "phoneNumber already exists" });
-      }
-      if (existingUser.username === username) {
-        return res.status(400).json({ message: "Username already exists" });
-      }
-    }
-    const user = await UserModel.create({
-      name,
-      username,
-      email,
-      password,
-      phoneNumber,
-    });
-    const token = generateToken(user._id);
-    res.cookie("jwt", token, cookieOptions);
-    res.status(201).json({
-      message: "User signed up successfully",
-      success: true,
-      redirectTo: `${process.env.VITE_API_URL_DASHBOARD}/dashboard/${user._id}/summery`,
-    });
-  } catch (error) {
-    console.error("Signup error:", error);
-    res.status(500).json({ message: error.message });
-  }
-};
+// module.exports.Signup = async (req, res) => {
+//   try {
+//     const { name, username, email, password, phoneNumber } = req.body;
+//     const existingUser = await UserModel.findOne({
+//       $or: [{ phoneNumber }, { username }],
+//     });
+//     if (existingUser) {
+//       if (existingUser.phoneNumber === phoneNumber) {
+//         return res.status(400).json({ message: "phoneNumber already exists" });
+//       }
+//       if (existingUser.username === username) {
+//         return res.status(400).json({ message: "Username already exists" });
+//       }
+//     }
+//     const user = await UserModel.create({
+//       name,
+//       username,
+//       email,
+//       password,
+//       phoneNumber,
+//     });
+//     const token = generateToken(user._id);
+//     res.cookie("jwt", token, cookieOptions);
+//     res.status(201).json({
+//       message: "User signed up successfully",
+//       success: true,
+//       redirectTo: `${process.env.VITE_API_URL_DASHBOARD}/dashboard/${user._id}/summery`,
+//     });
+//   } catch (error) {
+//     console.error("Signup error:", error);
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
-module.exports.Login = async (req, res) => {
-  try {
-    const { username, password, email } = req.body;
-    const user = await UserModel.findOne({ username });
-    if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-    if (user.email !== email) {
-      return res.status(401).json({ message: "Username & email don't match" });
-    }
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-    const token = generateToken(user._id);
-    res.cookie("jwt", token, cookieOptions);
-    res.status(200).json({
-      message: "User logged in successfully",
-      success: true,
-      redirectTo: `${process.env.VITE_API_URL_DASHBOARD}/dashboard/${user._id}/summery`,
-    });
-  } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).json({ message: error.message });
-  }
-};
+// module.exports.Login = async (req, res) => {
+//   try {
+//     const { username, password, email } = req.body;
+//     const user = await UserModel.findOne({ username });
+//     if (!user) {
+//       return res.status(401).json({ message: "Invalid credentials" });
+//     }
+//     if (user.email !== email) {
+//       return res.status(401).json({ message: "Username & email don't match" });
+//     }
+//     const isMatch = await user.comparePassword(password);
+//     if (!isMatch) {
+//       return res.status(401).json({ message: "Invalid credentials" });
+//     }
+//     const token = generateToken(user._id);
+//     res.cookie("jwt", token, cookieOptions);
+//     res.status(200).json({
+//       message: "User logged in successfully",
+//       success: true,
+//       redirectTo: `${process.env.VITE_API_URL_DASHBOARD}/dashboard/${user._id}/summery`,
+//     });
+//   } catch (error) {
+//     console.error("Login error:", error);
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
 exports.protect = async (req, res, next) => {
   try {

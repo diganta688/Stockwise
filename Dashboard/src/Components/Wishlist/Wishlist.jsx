@@ -12,7 +12,7 @@ function Wishlist() {
   const [allWishlist, setAllWishlist] = useState([]);
   const getData = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/allwishlist/${id}`, {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/wishlist/allwishlist/${id}`, {
         withCredentials: true
       });
       setAllWishlist(res.data.wishlists);
@@ -24,7 +24,7 @@ function Wishlist() {
   const update = async () => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/update-wishlist`,
+        `${import.meta.env.VITE_API_URL}/wishlist/update-wishlist`,
         {
           userId: id,
           data: allWishlist,
@@ -39,7 +39,7 @@ function Wishlist() {
     if (allWishlist.length > 0) {
       try {
         const response = await axios.post(
-          `${import.meta.env.VITE_API_URL}/update-stock-wishlist`,
+          `${import.meta.env.VITE_API_URL}/wishlist/update-stock-wishlist`,
           { names: allWishlist.map((item) => item.name) },
           { withCredentials: true }
         );

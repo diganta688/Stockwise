@@ -37,7 +37,7 @@ const WatchListButtons = ({ uid, setIsMouseEnter, display = true , setStockInfo 
     });
     value.setWatchlistUpdated((prev) => !prev);
     await axios.post(
-      `${import.meta.env.VITE_API_URL}/delete-from-wishlist/${id}`,
+      `${import.meta.env.VITE_API_URL}/wishlist/delete-from-wishlist/${id}`,
       {
         data: uid._id,
       }

@@ -36,7 +36,7 @@ function Signup() {
     setOtpSent(true);
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/signup/email`,
+        `${import.meta.env.VITE_API_URL}/user/signup/email`,
         {
           email: email,
         }
@@ -63,7 +63,7 @@ function Signup() {
     setOtpSent(true);
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/email-verification`,
+        `${import.meta.env.VITE_API_URL}/user/email-verification`,
         { email }
       );
       if (response.data.redirectTo) {

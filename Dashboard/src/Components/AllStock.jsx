@@ -9,7 +9,7 @@ import axios from "axios";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useParams } from "react-router-dom";
-import { ToastContainer, toast, Flip } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { counterUpdate } from "../Content/context";
 
@@ -28,7 +28,7 @@ function AllStock() {
 
   const handleClick = async () => {
     try {
-      let response = await axios.post(`${import.meta.env.VITE_API_URL}/search-stock`, {
+      let response = await axios.post(`${import.meta.env.VITE_API_URL}/search/search-stock`, {
         name: isSearchValue + ".NS",
       });
       if (response.status === 200) {
@@ -67,7 +67,7 @@ function AllStock() {
     setSave(!save);
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/addWishlist/${id}`,
+        `${import.meta.env.VITE_API_URL}/wishlist/addWishlist/${id}`,
         {
           data: stockInfo,
           username: stockInfo,

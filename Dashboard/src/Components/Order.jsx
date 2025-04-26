@@ -15,7 +15,7 @@ function Order() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`${import.meta.env.VITE_API_URL}/allOrders/${id}`)
+      .get(`${import.meta.env.VITE_API_URL}/order/allOrders/${id}`)
       .then((res) => {
         if (res.data.success) {
           const orders = res.data.orders;
@@ -25,7 +25,7 @@ function Order() {
             const timeDiff = currentDate - orderDate;
             if (timeDiff >= 24 * 60 * 60 * 1000) {
               axios
-                .delete(`${import.meta.env.VITE_API_URL}/delete-order/${order._id}/${id}`)
+                .delete(`${import.meta.env.VITE_API_URL}/order/delete-order/${order._id}/${id}`)
                 .then(() => {
                   setallOrders((prevOrders) =>
                     prevOrders.filter((o) => o._id !== order._id)

@@ -13,7 +13,7 @@ function TopBar() {
   const update = async () => {
     try {
       let res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/update-stock-wishlist`,
+        `${import.meta.env.VITE_API_URL}/wishlist/update-stock-wishlist`,
         {
           names: ["^BSESN", "^NSEI"],
         }

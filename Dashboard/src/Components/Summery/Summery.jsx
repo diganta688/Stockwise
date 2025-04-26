@@ -22,7 +22,7 @@ function Summery() {
     const fetchData = async () => {
       try {
         const holdingsRes = await axios.get(
-          `${import.meta.env.VITE_API_URL}/allHoldings/${id}`
+          `${import.meta.env.VITE_API_URL}/holding/allHolding/${id}`
         );
         const holdings = holdingsRes.data.holdings;
         setAllHoldings(holdings);
@@ -47,7 +47,7 @@ function Summery() {
       }
     };
     axios
-      .get(`${import.meta.env.VITE_API_URL}/allwishlist/${id}`)
+      .get(`${import.meta.env.VITE_API_URL}/wishlist/allwishlist/${id}`)
       .then((res) => {
         setAllWishlist(res.data.wishlists);
       });

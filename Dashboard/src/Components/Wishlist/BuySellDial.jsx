@@ -28,7 +28,7 @@ function BuySellDial({ isOpen, setIsopen, uid }) {
   let fetchData = async () => {
     try {
       let res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/fetch-order-details/${uid}`
+        `${import.meta.env.VITE_API_URL}/order/fetch-order-details/${uid}`
       );
       setStock(res.data.message);
     } catch (error) {
@@ -58,7 +58,7 @@ function BuySellDial({ isOpen, setIsopen, uid }) {
   const handleSubmit = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/wallet-balance/${id}`
+        `${import.meta.env.VITE_API_URL}/payment/wallet-balance/${id}`
       );
       const currentBalance = response.data.balance;
       if (currentBalance >= price) {
@@ -72,7 +72,7 @@ function BuySellDial({ isOpen, setIsopen, uid }) {
           setIsopen(false);
           mouse.setIsMouseEnter(false);
           await axios.post(
-            `${import.meta.env.VITE_API_URL}/addOrder/${id}/${uid}`,
+            `${import.meta.env.VITE_API_URL}/order/addOrder/${id}/${uid}`,
             {
               price: price,
               qty: qty,
@@ -80,7 +80,7 @@ function BuySellDial({ isOpen, setIsopen, uid }) {
             }
           );
           await axios.post(
-            `${import.meta.env.VITE_API_URL}/buy-stock-balence/${id}`,
+            `${import.meta.env.VITE_API_URL}/payment/buy-stock-balence/${id}`,
             {
               amount: price,
             }

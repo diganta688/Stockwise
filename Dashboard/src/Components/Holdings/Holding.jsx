@@ -20,7 +20,7 @@ const Holdings = () => {
   let get = async () => {
     try {
       setLoading(true);
-      await axios.get(`${import.meta.env.VITE_API_URL}/allHoldings/${id}`).then((res) => {
+      await axios.get(`${import.meta.env.VITE_API_URL}/holding/allHolding/${id}`).then((res) => {
         let holdings = res.data.holdings;
         setAllHoldings(res.data.holdings);
         const investment = holdings.reduce(
@@ -43,7 +43,7 @@ const Holdings = () => {
   
   const update =async ()=>{
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/update-holding`,
+      `${import.meta.env.VITE_API_URL}/holding/update-holding`,
       {
         data: allHoldings,
       }
@@ -54,7 +54,7 @@ const Holdings = () => {
     if(allHoldings.length>0){
       try {
         const response = await axios.post(
-          `${import.meta.env.VITE_API_URL}/update-stock-wishlist`,
+          `${import.meta.env.VITE_API_URL}/wishlist/update-stock-wishlist`,
           {
             names: allHoldings.map((item) => item.name),
           }

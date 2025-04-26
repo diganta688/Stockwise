@@ -13,7 +13,7 @@ function Home() {
   const [display, setDisplay] = useState(false);
     useEffect(() => {
     if (!id) {
-      window.location.href = `${import.meta.env.VITE_API_URL_FRONTEND}/signup`;
+      window.location.href = `${import.meta.env.VITE_API_URL_FRONTEND}/user/signup`;
       return;
     }
     fetchUserData();
@@ -22,7 +22,7 @@ function Home() {
   const fetchUserData = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/dashboard/${id}`,
+        `${import.meta.env.VITE_API_URL}/user/dashboard/${id}`,
         {
           withCredentials: true,
         }
@@ -35,7 +35,7 @@ function Home() {
         error.response?.status === 401 || 
         error.response?.status === 404
       ) {
-        window.location.href = `${import.meta.env.VITE_API_URL_FRONTEND}/signup`;
+        window.location.href = `${import.meta.env.VITE_API_URL_FRONTEND}/user/signup`;
       } else {
         toast.error("Something went wrong. User not found.");
       }

@@ -28,7 +28,7 @@ const Funds = () => {
   const fetchWalletBalance = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/wallet-balance/${id}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/payment/wallet-balance/${id}`);
       setWalletBalance(response.data.balance);
     } catch (error) {
       toast.error("Error fetching wallet balance");
@@ -39,7 +39,7 @@ const Funds = () => {
 
   const fetchTransactionHistory = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/transaction-history/${id}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/payment/transaction-history/${id}`);
       const sortedTransactions = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
       setTransactions(sortedTransactions);
     } catch (error) {
@@ -64,7 +64,7 @@ const Funds = () => {
       return;
     }
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/withdraw-funds/${id}`, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/payment/withdraw-funds/${id}`, {
         amount: amt,
       });
       if (response.data.status === "ok") {
@@ -87,7 +87,7 @@ const Funds = () => {
     }
 
     try {
-      const orderResponse = await axios.post(`${import.meta.env.VITE_API_URL}/create-order`, {
+      const orderResponse = await axios.post(`${import.meta.env.VITE_API_URL}/payment/create-order`, {
         amount: Math.round(amt * 100),
         currency: "INR",
         receipt: `receipt_${id}`,
@@ -104,7 +104,7 @@ const Funds = () => {
         order_id: order.id,
         handler: async (response) => {
           try {
-            const verify = await axios.post(`${import.meta.env.VITE_API_URL}/verify-payment/${id}`, response);
+            const verify = await axios.post(`${import.meta.env.VITE_API_URL}/payment/verify-payment/${id}`, response);
             if (verify.data.status === "ok") {
               toast.success("Payment Successful!");
               setAddFundOpen(false);
