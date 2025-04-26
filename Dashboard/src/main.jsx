@@ -9,6 +9,8 @@ createRoot(document.getElementById("root")).render(
     <Routes>
       <Route path="/dashboard/:id/*" element={<Home />} />
       <Route path="*" element={<NotFound />} />
+      <Route path="/" element={<Home/>} />
+      <Route path="/dashboard" element={<Home/>} />
     </Routes>
   </BrowserRouter>
 );
