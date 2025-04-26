@@ -21,14 +21,7 @@ const expresserr = require("./extra/expressErr");
 const wrapasync = require("./extra/wrapasync");
 const cookieParser = require("cookie-parser");
 const yahooFinance = require("yahoo-finance2").default;
-const accoutSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const twilioPhone = process.env.TWILIO_PHONE_NUMBER;
 const nodemailer = require("nodemailer");
-const client = require("twilio")(accoutSid, authToken, {
-  autoRetry: true,
-  maxRetries: 3,
-});
 const transporter = nodemailer.createTransport({
   service: "Gmail",
   auth: {
