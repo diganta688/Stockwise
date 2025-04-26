@@ -6,18 +6,18 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ToastContainer, toast, Flip } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const location = useLocation();
-  const phoneNumber = location.state?.mobile;
+  const email = location.state?.email;
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-    phoneNumber: phoneNumber
+    email:email
   });
   const [showPassword, setShowPassword] = useState(false);
   const handleTogglePassword = () => {
@@ -36,7 +36,7 @@ function Login() {
     return formData.username && formData.password;
   };
   useEffect(() => {
-    toast.success("verified Phone please login",  { position: "top-right" , autoclose: 2000});
+    toast.success("verified email please login",  { position: "top-right" , autoclose: 2000});
     if (!SuccessMessage) {
       navigate("/signup");
     }
@@ -71,11 +71,6 @@ function Login() {
         toast.error("An unexpected error occurred.",  { position: "top-right" , autoclose: 2000})
       }
     }
-    setFormData({
-      ...formData,
-      username: "",
-      password: "",
-    });
   };
   
   
@@ -84,7 +79,7 @@ function Login() {
   <div className="container p-3 p-md-5">
     <div className="row">
       <h2 className="text-center mb-4" style={{ padding: "20px 0" }}>
-        Hey, +91{phoneNumber}
+        Hey, Welcome Back
       </h2>
     </div>
     <div className="row justify-content-center">
@@ -129,10 +124,10 @@ function Login() {
           <div className="row mb-3">
             <TextField
               id="outlined-read-only-input"
-              label="Phone"
-              value={"+91" + phoneNumber}
+              label="Email address"
+              value={email}
               readOnly
-              name="phone"
+              name="email"
               fullWidth
             />
           </div>

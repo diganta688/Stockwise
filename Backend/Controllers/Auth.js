@@ -13,11 +13,11 @@ module.exports.Signup = async (req, res) => {
   try {
     const { name, username, email, password, phoneNumber } = req.body;
     const existingUser = await UserModel.findOne({
-      $or: [{ email }, { username }],
+      $or: [{ phoneNumber }, { username }],
     });
     if (existingUser) {
-      if (existingUser.email === email) {
-        return res.status(400).json({ message: "Email already exists" });
+      if (existingUser.phoneNumber === phoneNumber) {
+        return res.status(400).json({ message: "phoneNumber already exists" });
       }
       if (existingUser.username === username) {
         return res.status(400).json({ message: "Username already exists" });
@@ -45,13 +45,13 @@ module.exports.Signup = async (req, res) => {
 
 module.exports.Login = async (req, res) => {
   try {
-    const { username, password, phoneNumber } = req.body;
+    const { username, password, email } = req.body;
     const user = await UserModel.findOne({ username });
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    if (user.phoneNumber !== phoneNumber) {
-      return res.status(401).json({ message: "Username & phone don't match" });
+    if (user.email !== email) {
+      return res.status(401).json({ message: "Username & email don't match" });
     }
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {

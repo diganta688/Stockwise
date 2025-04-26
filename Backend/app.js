@@ -24,11 +24,18 @@ const yahooFinance = require("yahoo-finance2").default;
 const accoutSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioPhone = process.env.TWILIO_PHONE_NUMBER;
+const nodemailer = require("nodemailer");
 const client = require("twilio")(accoutSid, authToken, {
   autoRetry: true,
   maxRetries: 3,
 });
-
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 app.use(
   cors({
     origin: [
@@ -315,35 +322,40 @@ app.delete(
 );
 
 app.post(
-  "/signup/mobile",
+  "/signup/email",
   wrapasync(async (req, res, next) => {
-    const { phoneNumber } = req.body;
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ success: false, message: "Email is required." });
+    }
     const generateOTP = Math.floor(100000 + Math.random() * 900000).toString();
-    client.messages
-      .create({
-        body: `your one-time-password for verification is ${generateOTP}`,
-        to: phoneNumber,
-        from: twilioPhone,
-      })
-      .then((message) => {
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Your One-Time Password (OTP) for Verification",
+      text: `Your one-time password for verification is ${generateOTP}`,
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error sending email:", error);
+        return res.status(409).json({ success: false, message: "Error sending OTP email." });
+      } else {
         return res.status(200).json({
           success: true,
           redirectTo: "/otp-verification",
           generateOTP,
         });
-      })
-      .catch((e) => {
-        res.status(409).json({ success: false, message: "Error sending otp" });
-      });
+      }
+    });
   })
 );
 
 app.post(
-  "/mobile-verification",
+  "/email-verification",
   wrapasync(async (req, res, next) => {
-    const { phoneNumber } = req.body;
+    const { email } = req.body;
     try {
-      const user = await UserModel.findOne({ phoneNumber });
+      const user = await UserModel.findOne({ email });
       if (user) {
         res.status(200).json({ redirectTo: "/login" });
       } else {
@@ -352,7 +364,7 @@ app.post(
           .json({ success: true, redirectTo: "/Signup/user-details" });
       }
     } catch (e) {
-      console.error("Error checking phone number:", e);
+      console.error("Error checking Email address:", e);
       res
         .status(500)
         .json({ success: false, messsage: "Internal Server Error" });

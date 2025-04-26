@@ -6,9 +6,8 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
-import { ToastContainer, toast, Flip } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
@@ -16,7 +15,7 @@ function SignupUser() {
   const location = useLocation();
   const navigate = useNavigate();
   const SuccessMessage = location.state?.SuccessMessage;
-  const phoneNumber = location.state?.mobile;
+  const email = location.state?.email;
   const [showCreatePassword, setShowCreatePassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [existsError, setExistsError] = useState(null);
@@ -24,11 +23,11 @@ function SignupUser() {
   const [formData, setFormData] = useState({
     name: "",
     username: "",
-    email: "",
+    email: email,
     password: "",
     confirmPassword: "",
     date: new Date().toISOString(),
-    phoneNumber: phoneNumber,
+    phoneNumber: "",
   });
   const [passMatch, setPassMatch] = useState(true);
 
@@ -100,17 +99,6 @@ function SignupUser() {
         toast.error("An unexpected error occurred.",  { position: "top-right" , autoclose: 2000})
       }
     }
-
-    setFormData({
-      ...formData,
-      name: "",
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      date: new Date().toISOString(),
-      phoneNumber: phoneNumber,
-    });
   };
 useEffect(()=>{
   toast.success("Don't refresh or tab any other, just fill up the details", { position: "top-right" , autoclose: 2000})
@@ -159,7 +147,7 @@ useEffect(()=>{
                   label="Email"
                   variant="outlined"
                   name="email"
-                  value={formData.email}
+                  value={email}
                   onChange={handleChange}
                 />
               </div>
@@ -167,9 +155,9 @@ useEffect(()=>{
                 <TextField
                   id="outlined-read-only-input"
                   label="Phone"
-                  value={"+91"+phoneNumber}
+                  value={formData.phoneNumber}
                   readOnly
-                  name="phone"
+                  name="phoneNumber"
                   onChange={handleChange}
                 />
               </div>

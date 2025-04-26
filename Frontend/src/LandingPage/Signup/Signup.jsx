@@ -2,76 +2,73 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import "./Signup.css";
 
 function Signup() {
-  const [mobile, setMobile] = useState("");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [errorOtp, setErrorOtp] = useState("");
   const [isContinue, setIsContinue] = useState(false);
-  const [otpSent, setOtpSend] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
   const navigate = useNavigate();
+
+  const validateEmail = (value) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  };
+
   const handleInputChange = (e) => {
     const value = e.target.value;
-    if (value.length > 10) {
-      setError("Mobile number cannot exceed 10 digits.");
+    setEmail(value);
+    if (!validateEmail(value)) {
+      setError("Please enter a valid email address.");
       setIsContinue(false);
-    } else if (!/^[6-9]/.test(value) && value.length === 1) {
-      setError("Mobile number must start with 6, 7, 8, or 9.");
-      setIsContinue(false);
-    } else if (value.length === 10 && !error) {
-      setIsContinue(true);
     } else {
       setError("");
-      setIsContinue(false);
+      setIsContinue(true);
     }
-    setMobile(value);
   };
 
   const handleSubmit = async (e) => {
-    setIsContinue(false);
-    setOtpSend(true);
     e.preventDefault();
+    setIsContinue(false);
+    setOtpSent(true);
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/signup/mobile`,
+        `${import.meta.env.VITE_API_URL}/signup/email`,
         {
-          phoneNumber: "+91" + mobile,
+          email: email,
         }
       );
-      setOtpSend(false);
-      let { generateOTP, success } = response.data;
-      if (response.data.redirectTo && success) {
-        setIsContinue(true);
-        navigate(response.data.redirectTo, {
-          state: { mobile, generateOTP, success },
+      setOtpSent(false);
+      const { generateOTP, success, redirectTo } = response.data;
+      if (redirectTo && success) {
+        navigate(redirectTo, {
+          state: { email, generateOTP, success },
         });
       } else {
-        setIsContinue(true);
         setError("Unexpected response from server");
+        setIsContinue(true);
       }
     } catch (err) {
-      setIsContinue(true);
       setError("Error occurred while signing up. Please try again.");
-      setErrorOtp(
-        "Otp can be recive only few numbers. If you facing some issue then"
-      );
-      setOtpSend(false);
+      setErrorOtp("OTP can be received only by verified email addresses. If you're facing issues,");
+      setOtpSent(false);
+      setIsContinue(true);
     }
   };
-  const mobileVerification = async () => {
-    setOtpSend(true); 
+
+  const emailVerification = async () => {
+    setOtpSent(true);
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/mobile-verification`,
-        { phoneNumber: mobile }
+        `${import.meta.env.VITE_API_URL}/email-verification`,
+        { email }
       );
       if (response.data.redirectTo) {
         navigate(response.data.redirectTo, {
-          state: { mobile, SuccessMessage: true },
+          state: { email, SuccessMessage: true },
         });
       } else {
         setError("Unexpected response from server");
@@ -79,14 +76,14 @@ function Signup() {
     } catch (err) {
       setError("Error occurred while signing up. Please try again.");
     } finally {
-      setOtpSend(false);
+      setOtpSent(false);
     }
   };
 
   return (
-    <div className="container ">
+    <div className="container">
       <div className="row p-5">
-        <div className="col-8 signup-col" style={{margin: "0 auto"}}>
+        <div className="col-8 signup-col" style={{ margin: "0 auto" }}>
           <img
             src="media/Images/signup.png"
             alt="Signup Illustration"
@@ -94,69 +91,47 @@ function Signup() {
             style={{ width: "100%" }}
           />
         </div>
-        <div className="col d-flex flex-column justify-content-center" style={{minWidth: "264px"}}>
+        <div className="col d-flex flex-column justify-content-center" style={{ minWidth: "264px" }}>
           <form onSubmit={handleSubmit}>
             <div className="mb-2 px-2">
-              <h2>Verify Phone Number</h2>
+              <h2>Verify Email Address</h2>
             </div>
             <div className="text-muted px-2">
               <p>Or track your existing application.</p>
             </div>
             <div className="mb-3">
               <FormControl fullWidth sx={{ m: 1 }}>
-                <InputLabel htmlFor="outlined-adornment-Mobile">
-                  Mobile
-                </InputLabel>
+                <InputLabel htmlFor="outlined-adornment-email">Enter your email address</InputLabel>
                 <OutlinedInput
-                  type="number"
-                  id="outlined-adornment-Mobile"
-                  value={mobile}
+                  type="email"
+                  id="outlined-adornment-email"
+                  value={email}
                   onChange={handleInputChange}
-                  startAdornment={
-                    <InputAdornment position="start">+91</InputAdornment>
-                  }
-                  label="Mobile"
+                  label="Enter your email address"
                 />
               </FormControl>
-              {error && (
-                <div>
-                  <p className="text-danger small">{error}</p>
-                </div>
-              )}
+              {error && <p className="text-danger small">{error}</p>}
             </div>
             <div className="text-muted px-2">
               {errorOtp ? (
                 <p className="text-danger small">
                   {errorOtp}&nbsp;
                   {otpSent ? (
-                    <span style={{ color: "#0d6efd" }}>Loading...</span> 
+                    <span style={{ color: "#0d6efd" }}>Loading...</span>
                   ) : (
-                    <a
-                      style={{ cursor: "pointer", color: "#0d6efd" }}
-                      onClick={mobileVerification}
-                    >
+                    <a style={{ cursor: "pointer", color: "#0d6efd" }} onClick={emailVerification}>
                       Login Here
                     </a>
                   )}
                 </p>
               ) : (
-                <p>You will receive an OTP on your number</p>
+                <p>You will receive an OTP on your email</p>
               )}
             </div>
             <div className="px-2 mb-2">
-              {otpSent ? (
-                <button type="submit" className="btn btn-primary" disabled>
-                  Loading...
-                </button>
-              ) : isContinue ? (
-                <button type="submit" className="btn btn-primary">
-                  Continue
-                </button>
-              ) : (
-                <button type="submit" className="btn btn-primary" disabled>
-                  Continue
-                </button>
-              )}
+              <button type="submit" className="btn btn-primary" disabled={!isContinue || otpSent}>
+                {otpSent ? "Loading..." : "Continue"}
+              </button>
             </div>
             <div className="px-2" style={{ fontSize: "12px" }}>
               <a href="/">
@@ -168,15 +143,11 @@ function Signup() {
       </div>
       <div className="row text-center">
         <p className="disclaimer">
-          I authorise StockWISE to contact me even if my number is registered
-          on DND. I authorise StockWISE to fetch my KYC information from the
-          C-KYC registry with my PAN. Please visit <a href="/">this article</a>{" "}
-          to know more. By submitting your contact details, you authorize
-          StockWISE to contact you even if you are registered on DND & conduct
-          online KYC for trading & demat account opening as per KRA regulations
-          and PMLA guidelines. If you are looking to open a HUF, Corporate,
-          Partnership, or NRI account, you have to use the{" "}
-          <a href="/">offline forms</a>. For help, <a href="/">click here</a>.
+          I authorise StockWISE to contact me even if my email is registered for DND. I authorise StockWISE to fetch my KYC information from the
+          C-KYC registry with my PAN. Please visit <a href="/">this article</a> to know more. By submitting your contact details, you authorize
+          StockWISE to contact you & conduct online KYC for trading & demat account opening as per KRA regulations and PMLA guidelines. If you are
+          looking to open a HUF, Corporate, Partnership, or NRI account, you have to use the <a href="/">offline forms</a>. For help,{" "}
+          <a href="/">click here</a>.
         </p>
       </div>
     </div>
