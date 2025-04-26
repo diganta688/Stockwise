@@ -374,9 +374,24 @@ app.post(
 
 app.post("/signup/final", Signup);
 app.post("/login/final", Login);
-app.get("/dashboard/:id", protect, (req, res) => {
-  res.status(200).json({ message: "Protected route accessed" });
+app.get("/dashboard/:id", protect, async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(404).json({ status: false, error: "Invalid user ID" });
+    }
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ status: false, error: "User not found" });
+    }
+    res.status(200).json({ message: "Welcome to the Home Page", user: req.user });
+  } catch (error) {
+    console.error("Dashboard route error:", error);
+    res.status(500).json({ status: false, error: "Server error" });
+  }
 });
+
+
 app.post("/logout", logout);
 
 app.post("/user/find", async (req, res, next) => {

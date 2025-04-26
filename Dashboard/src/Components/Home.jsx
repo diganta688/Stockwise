@@ -5,12 +5,20 @@ import TopBar from "./TopBar";
 import Dashboard from "./Dashboard";
 import { uidContext } from "../Content/context";
 import axios from "axios";
-import { ToastContainer, Flip } from "react-toastify";
+import { ToastContainer, Flip, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Home() {
   const { id } = useParams();
   const [display, setDisplay] = useState(false);
+    useEffect(() => {
+    if (!id) {
+      window.location.href = `${import.meta.env.VITE_API_URL_FRONTEND}/signup`;
+      return;
+    }
+    fetchUserData();
+  }, []);
+  
   const fetchUserData = async () => {
     try {
       const response = await axios.get(
@@ -19,22 +27,25 @@ function Home() {
           withCredentials: true,
         }
       );
-      if (response.status !== 200) {
-        throw new Error("Failed to fetch user data");
+      if (response.status === 200) {
+        setDisplay(true);
       }
     } catch (error) {
-      if (error.response?.status === 401) {
-        window.location.href = `${
-          import.meta.env.VITE_API_URL_FRONTEND
-        }/signup`;
+      if (
+        error.response?.status === 401 || 
+        error.response?.status === 404
+      ) {
+        window.location.href = `${import.meta.env.VITE_API_URL_FRONTEND}/signup`;
+      } else {
+        toast.error("Something went wrong. User not found.");
       }
     }
   };
-  useEffect(() => {
-    fetchUserData();
-    setDisplay(true);
-  }, []);
-
+  
+  if (!display) {
+    return <div>Loading...</div>;
+  }
+  
   return (
     <uidContext.Provider value={{ uId: id }}>
       {display && (
