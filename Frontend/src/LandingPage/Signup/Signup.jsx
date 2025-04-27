@@ -110,7 +110,7 @@ function Signup() {
                   label="Enter your email address"
                 />
               </FormControl>
-              {error && <p className="text-danger small">{error}</p>}
+              {error && <p className="text-danger small m-0 mx-3">{error}</p>}
             </div>
             <div className="text-muted px-2">
               {errorOtp ? (

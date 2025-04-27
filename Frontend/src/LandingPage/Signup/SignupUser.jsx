@@ -30,6 +30,7 @@ function SignupUser() {
     phoneNumber: "",
   });
   const [passMatch, setPassMatch] = useState(true);
+  const [passwordError, setPasswordError] = useState("");
 
   const handleCreatePassword = () => {
     setShowCreatePassword((prev) => !prev);
@@ -44,6 +45,12 @@ function SignupUser() {
       ...prevData,
       [name]: value,
     }));
+    
+    if (name === "password") {
+      const error = passCheck(value);
+      setPasswordError(error);
+    }
+
     if (name === "confirmPassword") {
       passwordCheck(e);
     }
@@ -55,6 +62,25 @@ function SignupUser() {
       : setPassMatch(false);
   };
 
+  const passCheck = (e) => {
+    if (e.length < 8) {
+      return "Password must be at least 8 characters long";
+    }
+    if (!/[A-Z]/.test(e)) {
+      return "Password must contain at least one uppercase letter";
+    }
+    if (!/[a-z]/.test(e)) {
+      return "Password must contain at least one lowercase letter";
+    }
+    if (!/\d/.test(e)) {
+      return "Password must contain at least one number";
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(e)) {
+      return "Password must contain at least one special character";
+    }
+    return "";
+  };
+
   const isFormValid = () => {
     return (
       formData.name &&
@@ -62,7 +88,8 @@ function SignupUser() {
       formData.email &&
       formData.password &&
       formData.confirmPassword &&
-      passMatch
+      passMatch &&
+      !passwordError
     );
   };
 
@@ -100,23 +127,24 @@ function SignupUser() {
       }
     }
   };
-useEffect(()=>{
-  toast.success("Don't refresh or tab any other, just fill up the details", { position: "top-right" , autoclose: 2000})
-  if(!SuccessMessage){
-    navigate("/signup");
-  }
-},[]);
+
+  useEffect(() => {
+    toast.success("Don't refresh or tab any other, just fill up the details", { position: "top-right", autoclose: 2000 })
+    if (!SuccessMessage) {
+      navigate("/signup");
+    }
+  }, []);
+
   return (
     <>
       <div
         className="container"
         style={{ display: "flex", justifyContent: "center" }}
-      >
-      </div>
+      ></div>
       <div className="container">
         <form method="post" onSubmit={handleSubmit}>
           <div className="row p-5 signup-user" style={{ justifyContent: "center" }}>
-            <div className="col-5" style={{width: "100%"}}>
+            <div className="col-5" style={{ width: "100%" }}>
               <div className="row m-4">
                 <h4>Fill up your personal details</h4>
               </div>
@@ -185,8 +213,9 @@ useEffect(()=>{
                     ),
                   }}
                 />
+                {passwordError && <p className="text-danger m-0">{passwordError}</p>}
               </div>
-              <div className="row" style={{ margin: "24px 24px 0 24px" }}>
+              <div className="row m-4">
                 <TextField
                   id="confirm-password"
                   label="Confirm Password"
@@ -206,10 +235,10 @@ useEffect(()=>{
                     ),
                   }}
                 />
-              </div>
               {!passMatch && (
-                <p className="mx-4 text-danger small">Password doesn't match</p>
+                <p className="m-0 text-danger small">Password doesn't match</p>
               )}
+              </div>
               <div className="row m-4">
                 {isSubmitting ? (
                   <Button
