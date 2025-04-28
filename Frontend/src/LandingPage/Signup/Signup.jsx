@@ -72,6 +72,7 @@ function Signup() {
         });
       } else {
         setError("Unexpected response from server");
+        setOtpSent(false);
       }
     } catch (err) {
       setError("Error occurred while signing up. Please try again.");

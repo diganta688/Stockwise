@@ -4,6 +4,7 @@ import axios from "axios";
 import TextField from "@mui/material/TextField";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ForgotPass from "./ForgotPass";
 
 export default function SignupOtp() {
   const [otp, setOtp] = useState("");
@@ -14,7 +15,10 @@ export default function SignupOtp() {
   const email = location.state?.email;
   const otpValid = useRef(location.state?.generateOTP);
   const SuccessMessage = useRef(location.state?.success);
+  const { forgot = false } = location.state || {};
+  const forgotRef = useRef(forgot);  
   const [otpSent, setOtpSend] = useState(false);
+  const [otpOrPass, setOtpOrPass] = useState(false);
 
   useEffect(() => {
     if (!SuccessMessage.current) {
@@ -46,13 +50,18 @@ export default function SignupOtp() {
       setResendSuccess("A new OTP has been sent to your Email address.");
     } catch (err) {
       setOtpSend(false);
-      toast.error("Error occurred while resending OTP. Please try again.", {
-        position: "top-right",
-        autoclose: 2000,
-      });
+      toast.error("Error occurred while resending OTP. Please try again.");
     }
   };
   const handleSubmit = async (e) => {
+    if(forgotRef.current){
+      if(otpValid.current ===otp){
+        setOtpOrPass(true);
+      }else{
+        setError("The OTP you entered is incorrect. Please try again.");
+      }
+      return;
+    }
     e.preventDefault();
     setOtpSend(true);
     setError("");
@@ -89,7 +98,8 @@ export default function SignupOtp() {
   },[]);
 
   return (
-    <div className="d-flex justify-content-center align-items-center bg-light ">
+  <>
+  {otpOrPass? <ForgotPass email={email}/> :<div className="d-flex justify-content-center align-items-center bg-light ">
       <div
         className="card shadow-sm p-4 m-5"
         style={{ width: "100%", maxWidth: "400px", borderRadius: "12px" }}
@@ -154,5 +164,8 @@ export default function SignupOtp() {
         </form>
       </div>
     </div>
+}
+  
+  </>  
   );
 }
